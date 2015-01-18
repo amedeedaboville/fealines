@@ -1,0 +1,19 @@
+[
+record: { display: [all
+
+
+]
+
+steps
+for each step:
+connect to muse: true/false
+record: true/false
+display graph: which values
+
+metadata input:
+    "had coffee?": true/false
+    "hours of sleep": numeric
+    "write down the experience": text
+    "which did word descrbes the exp?": radio buttons
+    input label, type, default value
+time length: minutes, or button
