@@ -9,6 +9,8 @@ for each step:
 connect to muse: true/false
 record: true/false
 display graph: which values
+    alpha_1,2,3,4
+    fea, other metrics (hard coded for now)
 
 metadata input:
     "had coffee?": true/false
