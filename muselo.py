@@ -3,8 +3,10 @@ import sys
 import time
 
 class MuseServer(ServerThread):
-    def __init__(self):
+    def __init__(self, callback):
         ServerThread.__init__(self, 5000)
+        self.callback = callback
+        
 
     #receive accelrometer data
     @make_method('/muse/acc', 'fff')
@@ -16,17 +18,18 @@ class MuseServer(ServerThread):
     @make_method('/muse/eeg', 'ffff')
     def eeg_callback(self, path, args):
         l_ear, l_forehead, r_forehead, r_ear = args
+        self.callback.updateEEG(l_ear, l_forehead, r_forehead, r_ear)
         print "%s %f %f %f %f" % (path, l_ear, l_forehead, r_forehead, r_ear)
 
-    #handle unexpected messages
-    @make_method(None, None)
-    def fallback(self, path, args, types, src):
-        print "Unknown message \
-        \n\t Source: '%s' \
-        \n\t Address: '%s' \
-        \n\t Types: '%s ' \
-        \n\t Payload: '%s'" \
-        % (src.url, path, types, args)
+    ##handle unexpected messages
+    #@make_method(None, None)
+    #def fallback(self, path, args, types, src):
+    #    print "Unknown message \
+    #    \n\t Source: '%s' \
+    #    \n\t Address: '%s' \
+    #    \n\t Types: '%s ' \
+    #    \n\t Payload: '%s'" \
+    #    % (src.url, path, types, args)
 
 #try:
 #    server = MuseServer()
