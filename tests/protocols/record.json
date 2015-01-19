@@ -1,8 +1,8 @@
 [{
-    "muse":"true",
+    "connect":"true",
     "record":"true",
     "graph":"all",
-    "length":"00:10:00"
+    "duration":"00:10:00"
     }
 ]
 
