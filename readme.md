@@ -1,7 +1,7 @@
 #Fealines
 ---------
 
-The name comes from Frontal EEG Asymmetry and then the word lines.
+The name comes from Frontal EEG Asymmetry (fea). One of the uses of this app is to plot the FEA.
 
 ###Protocols
 --------
