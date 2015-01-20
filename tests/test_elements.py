@@ -6,8 +6,6 @@ class TestElements:
 
     def testEegPlot(self):
         plot = EEGPlot('all')
-        controls = plot.getControlWidget()
-        assert isinstance(controls, QtWidget)
         assert isinstance(plot.getWidget(), QtWidget)
 
     def testSignalDescriptor(self):
