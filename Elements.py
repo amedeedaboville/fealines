@@ -1,17 +1,21 @@
-
+import numpy as np
+import pyqtgraph as pg
 class EEGPlot:
-    # self.bands = ['alpha', 'beta', 'gamma', 'delta', 'theta']
-    # self.locations = ['0', '1', '2', '3']
-    def __init__(self):
-        self.eeg_readings['alpha'] = np.random.normal(size=100)
-        self.eeg_readings['beta']  = np.random.normal(size=100)
-        self.eeg_readings['delta'] = np.random.normal(size=100)
-        self.eeg_readings['gamma'] = np.random.normal(size=100)
+    def __init__(self, signals):
+        self.pw = pg.PlotWidget()
 
-        self.alphaPlot = self.pw.plot(title="B", y=self.eeg_readings['alpha'], pen=(0, 255, 0, 100))
-        self.betaPlot  = self.pw.plot(title="B", y=self.eeg_readings['beta'],  pen=(255, 10, 0, 255))
-        self.gammaPlot = self.pw.plot(title="B", y=self.eeg_readings['delta'], pen=(100, 100, 255, 100))
-        self.deltaPlot = self.pw.plot(title="B", y=self.eeg_readings['gamma'], pen=(255, 255, 100, 100))
+        self.data = {}
+        lines =  [self.read_signal(sig) for sig in signals.split(",")]
+        for line in lines:
+            self.data[line] = np.random.normal(size=100)
+            self.plots[line] = self.pw.plot(title=line, y=self.data[line], pen=(0, 255, 0, 100))
+        #TODO: register callbacks for updates on the lines we are plotting
+        return self.pw
+
+    def update(self, signal, new_dp):
+        self.data[signal] = np.roll(self.data[signal], -1)
+        self.data[signal][-1] = new_dp/100.
+        self.plots[signal].setData(self.data[signal])
 
     @classmethod
     def read_signal(cls, sig):
