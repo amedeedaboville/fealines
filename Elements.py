@@ -14,9 +14,26 @@ class EEGPlot:
         self.deltaPlot = self.pw.plot(title="B", y=self.eeg_readings['gamma'], pen=(255, 255, 100, 100))
 
     @classmethod
-    def read_signal(sig):
+    def read_signal(cls, sig):
         bands = ['alpha', 'beta', 'gamma', 'delta', 'theta']
         locations = ['0', '1', '2', '3']
-        all = bands * locations
-        if  sig is "all":
-            return all
+        sides_lr = {'right': ['2', '3'], 'left': ['0', '1']}
+        sides_fb= {'front': ['1', '2'], 'frontal': ['1','2'], 'back': ['0', '3'], 'ears': ['0','3']}
+
+        signals = {}
+        signals['all'] = set([band + loc for loc in locations for band in bands])
+
+        for side, locs in sides_fb.iteritems(): # front-alpha
+            for band in bands:
+                signals[side + '-' + band] = set([band + loc for loc in locs])
+
+        for side, locs in sides_lr.iteritems(): # right-beta
+            for band in bands:
+                signals[side + '-' + band] = set([band + loc for loc in locs])
+
+        for fb in sides_fb: #back-left-gamma
+            for lr in sides_lr:
+                for band in bands:
+                    signals[fb + '-' + lr + '-' + band] = signals[fb + '-' + band].intersection(signals[lr + '-' + band])
+
+        return signals[sig]

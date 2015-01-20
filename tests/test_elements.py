@@ -13,12 +13,11 @@ class TestElements:
     def testSignalDescriptor(self):
         assert EEGPlot.read_signal('all') is not None
 
-        assert EEGPlot.read_signal('frontal-alpha') is not None
-        assert EEGPlot.read_signal('ear-gamma') is not None
-        assert EEGPlot.read_signal('front-right-beta') is not None
-        assert EEGPlot.read_signal('front-left-alpha') is not None
+        assert EEGPlot.read_signal('frontal-alpha') == set(['alpha1', 'alpha2'])
+        assert EEGPlot.read_signal('front-delta') == set(['delta1', 'delta2'])
 
-        assert EEGPlot.read_signal('alpha0') is not None
-        assert EEGPlot.read_signal('beta1') is not None
-        assert EEGPlot.read_signal('delta2') is not None
-        assert EEGPlot.read_signal('gamma3') is not None
+        assert EEGPlot.read_signal('ears-beta') == set(['beta0', 'beta3'])
+        assert EEGPlot.read_signal('back-gamma') == set(['gamma0', 'gamma3'])
+
+        assert EEGPlot.read_signal('front-right-beta') == set(['beta2'])
+        assert EEGPlot.read_signal('front-left-alpha') == set(['alpha1'])
