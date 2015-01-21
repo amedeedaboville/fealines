@@ -1,16 +1,20 @@
 import numpy as np
 import pyqtgraph as pg
+from pyqtgraph.Qt import QtGui, QtCore
 class EEGPlot:
     def __init__(self, signals):
         self.pw = pg.PlotWidget()
-
         self.data = {}
-        lines =  [self.read_signal(sig) for sig in signals.split(",")]
+        self.plots = {}
+        lines = set()
+        for sig in signals.split(","):
+            lines = lines.union(self.read_signal(sig))
         for line in lines:
+            print line
             self.data[line] = np.random.normal(size=100)
             self.plots[line] = self.pw.plot(title=line, y=self.data[line], pen=(0, 255, 0, 100))
         #TODO: register callbacks for updates on the lines we are plotting
-        return self.pw
+
 
     def update(self, signal, new_dp):
         self.data[signal] = np.roll(self.data[signal], -1)
