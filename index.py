@@ -1,7 +1,7 @@
 from pyqtgraph.Qt import QtGui, QtCore
 import signal
 from muselo import *
-
+from feaProtocol import Protocol, Step
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class MainWindow(QtGui.QMainWindow):
@@ -23,10 +23,16 @@ class MainWindow(QtGui.QMainWindow):
 
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(closeAction)
-        
+
         self.setGeometry(1000,1000,1000,1000)
         self.setWindowTitle('fealines')
+        self.executeProtocol()
         self.show()
+
+    def executeProtocol(self):
+        pcl = Protocol('tests/protocols/record.json')
+        for step in pcl.steps:
+            self.setCentralWidget(step.renderWidget())
 
 def main():
     app = QtGui.QApplication(sys.argv)
