@@ -41,3 +41,31 @@ class EEGPlot:
                     signals[fb + '-' + lr + '-' + band] = signals[fb + '-' + band].intersection(signals[lr + '-' + band])
 
         return signals[sig]
+
+
+class TimerWidget(QtGui.QWidget):
+
+    def __init__(self, time, callback):
+        """
+        :param time:
+        The duration of the countdown timer, in seconds
+        :param callback:
+        The callback for when the timer finishes
+        """
+        super(TimerWidget, self).__init__()
+
+        self.label = QtGui.QLabel()
+
+        self.time_left = time
+        self.total_timer = QtCore.QTimer(self)
+        self.total_timer.timeout.connect(callback)
+        self.total_timer.start(time * 1000)
+
+        self.seconds_timer = QtCore.QTimer(self)
+        self.seconds_timer.timeout.connect(self.updateDisplay)
+        self.seconds_timer.start(1000)
+
+    def updateDisplay(self):
+        self.time_left -= 1
+        self.label.setText("%d:%02d" % (self.time_left/60., self.time_left % 60))
+
