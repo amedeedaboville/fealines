@@ -29,7 +29,7 @@ class Step:
 
         self.timer = TimerWidget(self.duration, self.endStep)
         grid.addWidget(self.timer, 1, 1)
-        grid.addWidget(self.plot, 1, 2)
+        grid.addWidget(self.plot.pw, 1, 2)
 
         return grid
 
