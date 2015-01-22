@@ -32,7 +32,9 @@ class MainWindow(QtGui.QMainWindow):
     def executeProtocol(self):
         pcl = Protocol('tests/protocols/record.json')
         for step in pcl.steps:
-            self.setCentralWidget(step.renderWidget())
+            central_widget = QtGui.QWidget()
+            self.setCentralWidget(central_widget)
+            central_widget.setLayout(step.renderWidget())
 
 def main():
     app = QtGui.QApplication(sys.argv)
