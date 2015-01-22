@@ -47,7 +47,7 @@ class EEGPlot:
         return signals[sig]
 
 
-class TimerWidget(QtGui.QWidget):
+class TimerWidget(QtGui.QLabel):
 
     def __init__(self, time, callback):
         """
@@ -58,7 +58,7 @@ class TimerWidget(QtGui.QWidget):
         """
         super(TimerWidget, self).__init__()
 
-        self.label = QtGui.QLabel()
+        self.setText("%d:%02d" % (time/60., time % 60))
 
         self.time_left = time
         self.total_timer = QtCore.QTimer(self)
@@ -71,5 +71,5 @@ class TimerWidget(QtGui.QWidget):
 
     def updateDisplay(self):
         self.time_left -= 1
-        self.label.setText("%d:%02d" % (self.time_left/60., self.time_left % 60))
+        self.setText("%d:%02d" % (self.time_left/60., self.time_left % 60))
 
