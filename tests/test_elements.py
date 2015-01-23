@@ -11,9 +11,6 @@ class TestElements:
 
     def testEegPlotUpdate(self):
         plot = EEGPlot('all')
-        assert muselo.server.listeners is not None  # check we have listeners (maybe move to a separate test_muselo?)
-        assert plot in muselo.server.listeners['alpha1']  # check we are listening to specific messages
-
         plot.update('alpha1', 80)
         assert plot.data['alpha1'][-1] == 80
         # TODO: test long term storage of the plot's data
