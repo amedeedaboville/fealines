@@ -12,7 +12,6 @@ class Protocol:
 
 class Step:
     def __init__(self, props):
-        self.params
         self.record = (props['record'] == 'true') or True
         self.connect = (props['connect'] == 'true') or True
         if props['duration'] is not None:
