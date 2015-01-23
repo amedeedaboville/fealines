@@ -12,6 +12,7 @@ class Protocol:
 
 class Step:
     def __init__(self, props):
+        self.params
         self.record = (props['record'] == 'true') or True
         self.connect = (props['connect'] == 'true') or True
         if props['duration'] is not None:
@@ -23,15 +24,19 @@ class Step:
         self.graph = props['graph'] or 'all'
 
     def renderWidget(self):
-        grid = QtGui.QGridLayout()
-        if self.graph is not None:
-            self.plot = EEGPlot(self.graph)
+        self.grid = QtGui.QGridLayout()
 
         self.timer = TimerWidget(self.duration, self.endStep)
-        grid.addWidget(self.timer, 1, 1)
-        grid.addWidget(self.plot.pw, 1, 2)
+        self.grid.addWidget(self.timer, 1, 1)
 
-        return grid
+        if self.graph is not None:
+            self.plot = EEGPlot(self.graph)
+            self.grid.addWidget(self.plot.pw, 1, 2)
+
+        return self.grid
 
     def endStep(self):
+        if not self.record: #record by default
+            print "not recording" #here don't save the Step data
+            #TODO: actually record
         print "step over"
