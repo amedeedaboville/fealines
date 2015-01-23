@@ -7,28 +7,25 @@ class MuseServer(ServerThread):
         ServerThread.__init__(self, 5000)
         self.listeners = {}
 
-    def register_listener(self, signal, listener):
-        if signal not in self.listeners:
-            self.listeners[signal] = []
-        if listener not in self.listeners[signal]:
-            self.listeners[signal].append(listener)
-        print "listeners now"
-        print self.listeners
 
-    def remove_listener(self, signal, listener):
-        if listener in self.listeners[signal]:
-            self.listeners[signal].remove(listener)
-
-    #receive EEG data
-    @make_method('/muse/eeg', 'ffff')
-    def eeg_callback(self, path, args):
-        print "eeg received with path"
-        print path
+    def receive_signal(self, path, args):
         if path in self.listeners:
             for listener in self.listeners[path]:
                 listener(path, args)
         l_ear, l_forehead, r_forehead, r_ear = args
         print "%s %f %f %f %f" % (path, l_ear, l_forehead, r_forehead, r_ear)
+
+
+    def register_listener(self, signal, listener):
+        if signal not in self.listeners:
+            self.add_method(signal, 'ffff', self.receive_signal)
+            self.listeners[signal] = []
+        if listener not in self.listeners[signal]:
+            self.listeners[signal].append(listener)
+
+    def remove_listener(self, signal, listener):
+        if listener in self.listeners[signal]:
+            self.listeners[signal].remove(listener)
 
     ##handle unexpected messages
     #@make_method(None, None)
