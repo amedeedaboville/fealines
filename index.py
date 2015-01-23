@@ -7,8 +7,6 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 class MainWindow(QtGui.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.server = MuseServer(self)
-        self.server.start()
         self.initUI()
 
     def initUI(self):

@@ -1,5 +1,5 @@
 from liblo import *
-import sys 
+import sys
 import time
 
 class MuseServer(ServerThread):
@@ -31,13 +31,13 @@ class MuseServer(ServerThread):
     #    \n\t Payload: '%s'" \
     #    % (src.url, path, types, args)
 
-#try:
-#    server = MuseServer()
-#except ServerError, err:
-#    print str(err)
-#    sys.exit()
+try:
+    server = MuseServer()
+except ServerError, err:
+    print str(err)
+    sys.exit()
 #
-#server.start()
+server.start()
 
 if __name__ == "__main__":
     while 1:
