@@ -23,14 +23,15 @@ class EEGPlot:
             if line == 'fea':
                 muselo.server.register_listener('/muse/elements/alpha_relative', self.receive_fea)
             else:
-                band_name = signal_name[:-1]
+                band_name = line[:-1]
                 if band_name in bands:
-                    muselo.server.register_listener('/muse/elements/%s_relative' % band_name, partial(self.receive_band, line=signal_name))
+                    # muselo.server.register_listener('/muse/elements/%s_relative' % band_name, partial(self.receive_band, line=line))
+                    muselo.server.register_listener('/muse/dsp/elements/%s' % band_name, partial(self.receive_band, self=self, line=line))
                 else:
-                    raise KeyError("Couldn't understand signal name %s and didn't register with server" % signal_name)
+                    raise KeyError("Couldn't understand signal name %s and didn't register with server" % line)
         # self.lines = lines
 
-    def receive_band(self, line, args):
+    def receive_band(self, line, path, args):
         print line
         signal_number = int(line[-1])
         new_dp = args[signal_number]
