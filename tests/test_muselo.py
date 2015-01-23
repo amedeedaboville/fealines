@@ -5,13 +5,19 @@ import mock
 class TestMuse:
 
     def testListeners(self):
-        assert muselo.server.listeners is not None  # check we have listeners (maybe move to a separate test_muselo.py?)
+        assert muselo.server.listeners is not None
         plot = mock.Mock()
 
-        muselo.server.register_listener('alpha1', plot)
-        assert plot in muselo.server.listeners['alpha1']  # check we are listening to specific messages
-        path = '/muse/elements/eeg'
+        path = '/muse/elements/eeg/alpha1'
+        muselo.server.register_listener(path, plot)
+        assert plot in muselo.server.listeners[path]
+
         args = [10, 20, 30, 40]
         muselo.server.eeg_callback(path, args)
         plot.assert_called_once_with(path, args)
+
+        plot.reset_mock()
+        muselo.server.remove_listener(path, plot)
+        muselo.server.eeg_callback(path, args)
+        assert not plot.called
 

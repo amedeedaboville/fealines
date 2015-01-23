@@ -3,22 +3,31 @@ import sys
 import time
 
 class MuseServer(ServerThread):
-    def __init__(self, callback):
+    def __init__(self):
         ServerThread.__init__(self, 5000)
-        self.callback = callback
-        
+        self.listeners = {}
 
-    #receive accelrometer data
-    @make_method('/muse/acc', 'fff')
-    def acc_callback(self, path, args):
-        acc_x, acc_y, acc_z = args
-        print "%s %f %f %f" % (path, acc_x, acc_y, acc_z)
+    def register_listener(self, signal, listener):
+        if signal not in self.listeners:
+            self.listeners[signal] = []
+        if listener not in self.listeners[signal]:
+            self.listeners[signal].append(listener)
+        print "listeners now"
+        print self.listeners
+
+    def remove_listener(self, signal, listener):
+        if listener in self.listeners[signal]:
+            self.listeners[signal].remove(listener)
 
     #receive EEG data
     @make_method('/muse/eeg', 'ffff')
     def eeg_callback(self, path, args):
+        print "eeg received with path"
+        print path
+        if path in self.listeners:
+            for listener in self.listeners[path]:
+                listener(path, args)
         l_ear, l_forehead, r_forehead, r_ear = args
-        self.callback.updateEEG(l_ear, l_forehead, r_forehead, r_ear)
         print "%s %f %f %f %f" % (path, l_ear, l_forehead, r_forehead, r_ear)
 
     ##handle unexpected messages
@@ -36,7 +45,6 @@ try:
 except ServerError, err:
     print str(err)
     sys.exit()
-#
 server.start()
 
 if __name__ == "__main__":
