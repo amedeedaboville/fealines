@@ -1,5 +1,6 @@
 import json
-from Elements import EEGPlot, TimerWidget
+from elements.EEGPlot import EEGPlot
+from elements.TimerWidget import TimerWidget
 from pyqtgraph import QtGui
 
 

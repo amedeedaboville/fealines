@@ -1,7 +1,7 @@
 import numpy as np
 import pyqtgraph as pg
 from functools import partial
-from .. import muselo
+import muselo
 
 
 class EEGPlot:

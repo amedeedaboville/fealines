@@ -28,7 +28,7 @@ class MainWindow(QtGui.QMainWindow):
         self.show()
 
     def executeProtocol(self):
-        pcl = Protocol('./default_protocol.json')
+        pcl = Protocol('./protocols/default.json')
         self.central_widget = QtGui.QWidget()
         self.setCentralWidget(self.central_widget)
         for step in pcl.steps:
