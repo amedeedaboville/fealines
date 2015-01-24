@@ -4,6 +4,7 @@ from pyqtgraph.Qt import QtGui, QtCore
 from functools import partial
 import muselo
 
+
 class EEGPlot:
     def __init__(self, signals):
         self.pw = pg.PlotWidget()
@@ -26,15 +27,15 @@ class EEGPlot:
                 band_name = line[:-1]
                 if band_name in bands:
                     # muselo.server.register_listener('/muse/elements/%s_relative' % band_name, partial(self.receive_band, line=line))
-                    muselo.server.register_listener('/muse/dsp/elements/%s' % band_name, partial(self.receive_band, self=self, line=line))
+                    muselo.server.register_listener('/muse/dsp/elements/%s' % band_name,
+                                                    partial(self.receive_band, line))
                 else:
                     raise KeyError("Couldn't understand signal name %s and didn't register with server" % line)
-        # self.lines = lines
+                    # self.lines = lines
 
-    def receive_band(self, line, path, args):
-        print line
+    def receive_band(self, line, *args):
         signal_number = int(line[-1])
-        new_dp = args[signal_number]
+        new_dp = args[1][signal_number]  # args is [band_name, [left_ear, left_forehead, right_forehead, right_ear]]
         self.update_dp(line, new_dp)
 
     def receive_fea(self, args):
@@ -45,8 +46,9 @@ class EEGPlot:
         self.update_dp('fea', new_dp)
 
     def update_dp(self, line, new_dp):
+        print "updating dp on %s to %f " % (line, new_dp)
         self.data[line] = np.roll(self.data[line], -1)
-        self.data[line][-1] = new_dp/100.
+        self.data[line][-1] = new_dp / 100.
         self.plots[line].setData(self.data[line])
 
     @classmethod
@@ -54,29 +56,29 @@ class EEGPlot:
         bands = ['alpha', 'beta', 'gamma', 'delta', 'theta']
         locations = ['0', '1', '2', '3']
         sides_lr = {'right': ['2', '3'], 'left': ['0', '1']}
-        sides_fb= {'front': ['1', '2'], 'frontal': ['1','2'], 'back': ['0', '3'], 'ears': ['0','3']}
+        sides_fb = {'front': ['1', '2'], 'frontal': ['1', '2'], 'back': ['0', '3'], 'ears': ['0', '3']}
 
         signals = {}
         signals['all'] = set([band + loc for loc in locations for band in bands])
 
-        for side, locs in sides_fb.iteritems(): # front-alpha
+        for side, locs in sides_fb.iteritems():  # front-alpha
             for band in bands:
                 signals[side + '-' + band] = set([band + loc for loc in locs])
 
-        for side, locs in sides_lr.iteritems(): # right-beta
+        for side, locs in sides_lr.iteritems():  # right-beta
             for band in bands:
                 signals[side + '-' + band] = set([band + loc for loc in locs])
 
-        for fb in sides_fb: #back-left-gamma
+        for fb in sides_fb:  # back-left-gamma
             for lr in sides_lr:
                 for band in bands:
-                    signals[fb + '-' + lr + '-' + band] = signals[fb + '-' + band].intersection(signals[lr + '-' + band])
+                    signals[fb + '-' + lr + '-' + band] = signals[fb + '-' + band].intersection(
+                        signals[lr + '-' + band])
 
         return signals[sig]
 
 
 class TimerWidget(QtGui.QLabel):
-
     def __init__(self, time, callback):
         """
         :param time:
@@ -86,7 +88,7 @@ class TimerWidget(QtGui.QLabel):
         """
         super(TimerWidget, self).__init__()
 
-        self.setText("%d:%02d" % (time/60., time % 60))
+        self.setText("%d:%02d" % (time / 60., time % 60))
 
         self.time_left = time
         self.total_timer = QtCore.QTimer(self)
@@ -99,5 +101,5 @@ class TimerWidget(QtGui.QLabel):
 
     def updateDisplay(self):
         self.time_left -= 1
-        self.setText("%d:%02d" % (self.time_left/60., self.time_left % 60))
+        self.setText("%d:%02d" % (self.time_left / 60., self.time_left % 60))
 
