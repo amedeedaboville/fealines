@@ -16,7 +16,6 @@ class EEGPlot:
         for sig in signals.split(","):
             signal_name = self.read_signal(sig)
             lines = lines.union(signal_name)
-
         for line in lines:
             self.data[line] = np.random.normal(size=100)
             self.plots[line] = self.pw.plot(title=line, y=self.data[line], pen=(0, 255, 0, 100))
@@ -33,26 +32,32 @@ class EEGPlot:
                     raise KeyError("Couldn't understand signal name %s and didn't register with server" % line)
                     # self.lines = lines
 
-    def receive_band(self, line, *args):
+    def get_widget(self):
+        return self.pw
+
+    def receive_band(self, line, args):
         signal_number = int(line[-1])
         new_dp = args[1][signal_number]  # args is [band_name, [left_ear, left_forehead, right_forehead, right_ear]]
         self.update_dp(line, new_dp)
 
     def receive_fea(self, args):
-        print "receiving fea dp "
-        left_alpha = args[1]
-        right_alpha = args[2]
+        left_alpha = args[1][1]
+        right_alpha = args[1][2]
         new_dp = right_alpha - left_alpha
         self.update_dp('fea', new_dp)
 
     def update_dp(self, line, new_dp):
-        print "updating dp on %s to %f " % (line, new_dp)
         self.data[line] = np.roll(self.data[line], -1)
-        self.data[line][-1] = new_dp / 100.
+        self.data[line][-1] = new_dp
         self.plots[line].setData(self.data[line])
 
     @classmethod
     def read_signal(cls, sig):
+        """
+
+        :param sig: a name of a signal, like front-right-delta
+        :return: a set of strings that are names of eeg bands
+        """
         bands = ['alpha', 'beta', 'gamma', 'delta', 'theta']
         locations = ['0', '1', '2', '3']
         sides_lr = {'right': ['2', '3'], 'left': ['0', '1']}
@@ -60,6 +65,7 @@ class EEGPlot:
 
         signals = {}
         signals['all'] = set([band + loc for loc in locations for band in bands])
+        signals['fea'] = set(('fea',))
 
         for side, locs in sides_fb.iteritems():  # front-alpha
             for band in bands:
