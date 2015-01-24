@@ -1,4 +1,4 @@
-from Elements import EEGPlot
+from Elements.EEGPlot import EEGPlot
 import sys
 from pyqtgraph.Qt import QtGui
 from pyqtgraph.widgets.PlotWidget import PlotWidget
