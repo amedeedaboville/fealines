@@ -25,8 +25,6 @@ class MainWindow(QtGui.QMainWindow):
 
         self.setGeometry(1000,1000,1000,1000)
         self.setWindowTitle('fealines')
-        self.executeProtocol()
-        print "showing window"
         self.show()
 
     def executeProtocol(self):
@@ -39,6 +37,7 @@ class MainWindow(QtGui.QMainWindow):
 def main():
     app = QtGui.QApplication(sys.argv)
     main = MainWindow()
+    main.executeProtocol()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
