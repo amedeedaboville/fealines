@@ -19,11 +19,11 @@ def test_eegplot_update():
 
 def test_receive_fea():
     plot = EEGPlot('fea')
-    plot.receive_fea(('/muse/dsp/elements/theta', [0.1, 0.2, 0.3, 0.4]))
+    plot.receive_fea('/muse/dsp/elements/theta', [0.1, 0.2, 0.3, 0.4])
     assert np.isclose(plot.data['fea'][-1],0.1)
-    plot.receive_fea(('/muse/dsp/elements/theta', [0.1, 0.3, 0.1, 0.4]))
+    plot.receive_fea('/muse/dsp/elements/theta', [0.1, 0.3, 0.1, 0.4])
     assert np.isclose(plot.data['fea'][-1],-0.2)
-    plot.receive_fea(('/muse/dsp/elements/theta', [0.1, 0.6, 0.6, 0.4]))
+    plot.receive_fea('/muse/dsp/elements/theta', [0.1, 0.6, 0.6, 0.4])
     assert np.isclose(plot.data['fea'][-1],0)
 
 def test_signal_descriptor():

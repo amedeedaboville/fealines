@@ -22,6 +22,7 @@ class EEGPlot:
 
             if line == 'fea':
                 muselo.server.register_listener('/muse/elements/alpha_relative', self.receive_fea)
+                muselo.server.register_listener('/muse/dsp/elements/alpha', self.receive_fea)
             else:
                 band_name = line[:-1]
                 if band_name in bands:
@@ -40,9 +41,10 @@ class EEGPlot:
         new_dp = args[1][signal_number]  # args is [band_name, [left_ear, left_forehead, right_forehead, right_ear]]
         self.update_dp(line, new_dp)
 
-    def receive_fea(self, args):
-        left_alpha = args[1][1]
-        right_alpha = args[1][2]
+    def receive_fea(self, path, args):
+        left_alpha = args[1]
+        right_alpha = args[2]
+
         new_dp = right_alpha - left_alpha
         self.update_dp('fea', new_dp)
 
