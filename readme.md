@@ -31,3 +31,10 @@ to investigate phenomena in the raw data later.
 fealines only listens to a small fraction of osc messages. Most likely the alpha1 and alpha2, and maybe
 some device info...
 So far I am going to have each Step Element (graphs, inputs like checkboxes, text) save their own data.
+
+###TODO
+* save data files properly.
+    * + write down a json schema for data files
+* test interactions between steps of a protocol
+    * + write down a json schema for protocol files (later)
+* make a calibration step
