@@ -15,6 +15,8 @@ class EEGPlot:
         for sig in signals.split(","):
             signal_name = self.read_signal(sig)
             lines = lines.union(signal_name)
+
+        self.lines = lines
         for line in lines:
             self.data[line] = np.random.normal(size=100)
             self.plots[line] = self.pw.plot(title=line, y=self.data[line], pen=(0, 255, 0, 100))
@@ -30,7 +32,6 @@ class EEGPlot:
                                                     partial(self.receive_band, line))
                 else:
                     raise KeyError("Couldn't understand signal name %s and didn't register with server" % line)
-                    # self.lines = lines
 
     def get_widget(self):
         return self.pw
@@ -51,6 +52,21 @@ class EEGPlot:
         self.data[line] = np.roll(self.data[line], -1)
         self.data[line][-1] = new_dp
         self.plots[line].setData(self.data[line])
+
+    def serialize(self):
+        plot_dict = {}
+        plot_dict['lines'] = self.lines
+        plot_dict['data'] = self.data
+        return plot_dict
+
+    @classmethod
+    def deserialize(cls, plot_dict):
+        new_plot = EEGPlot('')
+        new_plot.lines = plot_dict['lines']
+        for key, value in plot_dict['data'].iteritems():
+            print "adding key %s to data" % key
+            new_plot.data[key] = value
+        return new_plot
 
     @classmethod
     def read_signal(cls, sig):
@@ -82,4 +98,7 @@ class EEGPlot:
                     signals[fb + '-' + lr + '-' + band] = signals[fb + '-' + band].intersection(
                         signals[lr + '-' + band])
 
-        return signals[sig]
+        if sig in signals:
+            return signals[sig]
+        else:
+            return ""

@@ -1,4 +1,4 @@
-from Elements.EEGPlot import EEGPlot
+from elements.EEGPlot import EEGPlot
 import sys
 from pyqtgraph.Qt import QtGui
 from pyqtgraph.widgets.PlotWidget import PlotWidget
@@ -19,11 +19,11 @@ def test_eegplot_update():
 
 def test_receive_fea():
     plot = EEGPlot('fea')
-    plot.receive_fea('/muse/dsp/elements/theta', [0.1, 0.2, 0.3, 0.4])
+    plot.receive_fea('/muse/dsp/elements/alpha', [0.1, 0.2, 0.3, 0.4])
     assert np.isclose(plot.data['fea'][-1],0.1)
-    plot.receive_fea('/muse/dsp/elements/theta', [0.1, 0.3, 0.1, 0.4])
+    plot.receive_fea('/muse/dsp/elements/alpha', [0.1, 0.3, 0.1, 0.4])
     assert np.isclose(plot.data['fea'][-1],-0.2)
-    plot.receive_fea('/muse/dsp/elements/theta', [0.1, 0.6, 0.6, 0.4])
+    plot.receive_fea('/muse/dsp/elements/alpha', [0.1, 0.6, 0.6, 0.4])
     assert np.isclose(plot.data['fea'][-1],0)
 
 def test_signal_descriptor():
@@ -37,3 +37,12 @@ def test_signal_descriptor():
 
     assert EEGPlot.read_signal('front-right-beta') == set(['beta2'])
     assert EEGPlot.read_signal('front-left-alpha') == set(['alpha1'])
+
+def test_save():
+    plot = EEGPlot('fea')
+    for i in range(10):
+        plot.receive_fea('/muse/dsp/elements/alpha', [0.1, np.random.random(), np.random.random(), 0.4])
+    saved_plot = plot.serialize()
+    assert saved_plot is not None
+    restored_plot = EEGPlot.deserialize(saved_plot)
+    assert np.allclose(restored_plot.data['fea'], plot.data['fea'])
