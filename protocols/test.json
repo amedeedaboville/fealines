@@ -1,7 +1,14 @@
 [{
+    "name":"test 1",
     "record":"true",
     "graph":"fea",
-    "duration":"00:00:05"
+    "duration":"00:00:01"
+    },
+    {
+    "name":"test 2",
+    "record":"true",
+    "graph":"fea",
+    "duration":"00:00:01"
     }
 ]
 
