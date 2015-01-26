@@ -37,8 +37,8 @@ class Protocol:
         self.next_step()
 
     def next_step(self):
-        # self.current_step_idx += 1
-        if len(self.steps) < self.current_step_idx + 1:
+        print "next step"
+        if len(self.steps) > self.current_step_idx + 1:
             self.session['steps'][self.current_step_idx]['end'] = datetime.datetime.now()
             self.current_step = self.steps[self.current_step_idx]
             # self.current_step_idx += 1
