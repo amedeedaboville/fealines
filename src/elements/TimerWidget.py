@@ -14,10 +14,12 @@ class TimerWidget(QtGui.QLabel):
         self.time_left = time
         self.total_timer = QtCore.QTimer(self)
         self.total_timer.timeout.connect(callback)
-        self.total_timer.start(time * 1000)
 
         self.seconds_timer = QtCore.QTimer(self)
         self.seconds_timer.timeout.connect(self.updateDisplay)
+
+    def start(self):
+        self.total_timer.start(self.time_left * 1000)
         self.seconds_timer.start(1000)
 
     def updateDisplay(self):
