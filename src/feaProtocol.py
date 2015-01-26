@@ -27,7 +27,8 @@ class Protocol:
         return self.widget
 
     def end(self):
-        print "protocol ended"
+        print "protocol ended. Data:"
+        print self.session
 
     def end_step(self, data_dict):
         self.session['steps'].append({})
@@ -75,9 +76,9 @@ class Step:
         return self.grid
 
     def endStep(self):
+        print "step over"
         self.data_dict = {}
         if self.record: #record by default
             for name, widget in self.data_widgets.iteritems():
                 self.data_dict[name] = widget.serialize()
         self.callback(self.data_dict)
-        print "step over"
