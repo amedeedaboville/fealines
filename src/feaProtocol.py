@@ -18,13 +18,15 @@ class Protocol:
 
         self.current_step_idx = 0
         self.current_step = self.steps[self.current_step_idx]
-        self.widget = QtGui.QWidget()
+        self.main_widget = QtGui.QWidget()
+        self.layout = QtGui.QGridLayout()
+        self.main_widget.setLayout(self.layout)
 
     def start(self):
-        self.grid = self.current_step.startStep(self.end_step)
-        self.widget.setLayout(self.grid)
+        self.current_widget = self.current_step.startStep(self.end_step)
+        self.layout.addWidget(self.current_widget)
         self.session['start'] = datetime.datetime.now()
-        return self.widget
+        return self.main_widget
 
     def end(self):
         print "protocol ended. Data:"
@@ -40,10 +42,13 @@ class Protocol:
         print "next step"
         if len(self.steps) > self.current_step_idx + 1:
             self.session['steps'][self.current_step_idx]['end'] = datetime.datetime.now()
+
+            self.current_step_idx += 1
             self.current_step = self.steps[self.current_step_idx]
-            # self.current_step_idx += 1
-            self.grid = self.current_step.startStep(self.end_step)
-            self.widget.setLayout(self.grid)
+            self.current_widget.close()
+            self.layout.removeWidget(self.current_widget)
+            self.current_widget = self.current_step.startStep(self.end_step)
+            self.layout.addWidget(self.current_widget)
         else:
             self.end()
 
@@ -58,8 +63,13 @@ class Step:
             self.duration = 600
 
         self.graph = props['graph'] or 'all'
+        self.name = props['name'] or ""
+
+        self.data_dict = {"name": self.name}
 
         self.timer = TimerWidget(self.duration, self.endStep)
+
+        self.widget = QtGui.QWidget()
         self.grid = QtGui.QGridLayout()
         self.grid.addWidget(self.timer, 1, 1)
 
@@ -67,17 +77,17 @@ class Step:
             self.plot = EEGPlot(self.graph)
             self.grid.addWidget(self.plot.pw, 1, 2)
 
+        self.widget.setLayout(self.grid)
         self.data_widgets = {'plot': self.plot} # TODO: Add other kinds of data widgets like checkboxes
 
     def startStep(self, callback):
         self.timer.start()
         self.plot.start()
         self.callback = callback
-        return self.grid
+        return self.widget
 
     def endStep(self):
         print "step over"
-        self.data_dict = {}
         if self.record: #record by default
             for name, widget in self.data_widgets.iteritems():
                 self.data_dict[name] = widget.serialize()
