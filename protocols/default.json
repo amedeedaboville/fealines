@@ -1,5 +1,5 @@
 [{
-    "connect":"true",
+    "name":"collect",
     "record":"true",
     "graph":"fea",
     "duration":"00:10:00"
