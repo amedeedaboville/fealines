@@ -11,9 +11,12 @@ class TimerWidget(QtGui.QLabel):
 
         self.setText("%d:%02d" % (time / 60., time % 60))
 
+        self.callback = callback
         self.time_left = time
+
         self.total_timer = QtCore.QTimer(self)
-        self.total_timer.timeout.connect(callback)
+        self.total_timer.setSingleShot(True)
+        self.total_timer.timeout.connect(self.stop)
 
         self.seconds_timer = QtCore.QTimer(self)
         self.seconds_timer.timeout.connect(self.updateDisplay)
@@ -22,7 +25,13 @@ class TimerWidget(QtGui.QLabel):
         self.total_timer.start(self.time_left * 1000)
         self.seconds_timer.start(1000)
 
-    def updateDisplay(self):
-        self.time_left -= 1
-        self.setText("%d:%02d" % (self.time_left / 60., self.time_left % 60))
+    def stop(self):
+        self.updateDisplay(0)
+        self.seconds_timer.stop()
+        self.callback()
 
+    def updateDisplay(self,new_time=None):
+        if new_time is None:
+            self.time_left -= 1
+            new_time = self.time_left
+        self.setText("%d:%02d" % (new_time / 60., new_time % 60))
