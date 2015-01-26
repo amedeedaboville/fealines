@@ -12,6 +12,7 @@ def test_eegplot_setup():
 def test_eegplot_update():
     print "testing update"
     plot = EEGPlot('all')
+    plot.start()
     plot.receive_band('theta1', ('/muse/dsp/elements/theta', [0.1, 0.2, 0.3, 0.4]))
     print plot.data['theta1'][-1]
     assert plot.data['theta1'][-1] == 0.2
@@ -19,6 +20,7 @@ def test_eegplot_update():
 
 def test_receive_fea():
     plot = EEGPlot('fea')
+    plot.start()
     plot.receive_fea('/muse/dsp/elements/alpha', [0.1, 0.2, 0.3, 0.4])
     assert np.isclose(plot.data['fea'][-1],0.1)
     plot.receive_fea('/muse/dsp/elements/alpha', [0.1, 0.3, 0.1, 0.4])
@@ -40,6 +42,7 @@ def test_signal_descriptor():
 
 def test_save():
     plot = EEGPlot('fea')
+    plot.start()
     for i in range(10):
         plot.receive_fea('/muse/dsp/elements/alpha', [0.1, np.random.random(), np.random.random(), 0.4])
     saved_plot = plot.serialize()

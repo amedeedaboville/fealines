@@ -9,29 +9,34 @@ class EEGPlot:
         self.pw = pg.PlotWidget()
         self.data = {}
         self.plots = {}
-        lines = set()
-        bands = ['alpha', 'beta', 'delta', 'gamma', 'theta']
+        self.lines = set()
 
         for sig in signals.split(","):
             signal_name = self.read_signal(sig)
-            lines = lines.union(signal_name)
+            self.lines = self.lines.union(signal_name)
 
-        self.lines = lines
-        for line in lines:
+    def start(self):
+        bands = ['alpha', 'beta', 'delta', 'gamma', 'theta']
+        for line in self.lines:
             self.data[line] = np.random.normal(size=100)
             self.plots[line] = self.pw.plot(title=line, y=self.data[line], pen=(0, 255, 0, 100))
 
+            #For now we register listeners on the paths of both muse-player versions: 3.4 and 3.6
             if line == 'fea':
                 muselo.server.register_listener('/muse/elements/alpha_relative', self.receive_fea)
                 muselo.server.register_listener('/muse/dsp/elements/alpha', self.receive_fea)
             else:
                 band_name = line[:-1]
                 if band_name in bands:
-                    # muselo.server.register_listener('/muse/elements/%s_relative' % band_name, partial(self.receive_band, line=line))
+                    muselo.server.register_listener('/muse/elements/%s_relative' % band_name,
+                                                    partial(self.receive_band, line))
                     muselo.server.register_listener('/muse/dsp/elements/%s' % band_name,
                                                     partial(self.receive_band, line))
                 else:
                     raise KeyError("Couldn't understand signal name %s and didn't register with server" % line)
+
+    def stop(self):
+        pass # TODO: remove listeners
 
     def get_widget(self):
         return self.pw
