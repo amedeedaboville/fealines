@@ -39,7 +39,6 @@ class Protocol:
         self.next_step()
 
     def next_step(self):
-        print "next step"
         if len(self.steps) > self.current_step_idx + 1:
             self.session['steps'][self.current_step_idx]['end'] = datetime.datetime.now()
 
@@ -87,7 +86,8 @@ class Step:
         return self.widget
 
     def endStep(self):
-        print "step over"
+        if self.graph:
+            self.plot.stop()
         if self.record: #record by default
             for name, widget in self.data_widgets.iteritems():
                 self.data_dict[name] = widget.serialize()
