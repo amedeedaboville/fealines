@@ -1,0 +1,6 @@
+#!/bin/bash
+HZ="50"
+/Applications/Muse/muse-io --preset 15 --dsp --device 'Muse' --osc osc.udp://localhost:5000 --osc-timestamp --${HZ}hz &&
+python src/main.py &
+
+#/muse-player -f recordings/nov22-650pm.muse -s osc.udp://localhost:5000
