@@ -1,6 +1,30 @@
 #!/bin/bash
 HZ="50"
-/Applications/Muse/muse-io --preset 15 --dsp --device 'Muse' --osc osc.udp://localhost:5000 --osc-timestamp --${HZ}hz &&
-python src/main.py &
+DEFAULT_TEST=./recordings/test/3min.muse
+USAGE="Here are the command line options: `basename $0` [-hv] [-t [test_name]]"
+while getopts :vht OPT; do
+    case "$OPT" in
+        h)
+            echo $USAGE
+            exit 0
+            ;;
+        v)
+            echo "`basename $0` version 0.1"
+            exit 0
+            ;;
+        t) TEST=TRUE ;;
+        \?) # getopts issues an error message
+            echo $USAGE >&2
+            exit 1
+            ;;
+    esac
+done
 
-#/muse-player -f recordings/nov22-650pm.muse -s osc.udp://localhost:5000
+if [ $TEST ]
+then
+    CMD="/Applications/Muse/muse-player -f $DEFAULT_TEST -s osc.udp://localhost:5000"
+else
+    CMD="/Applications/Muse/muse-io --preset 15 --dsp --device 'Muse' --osc osc.udp://localhost:5000 --osc-timestamp --${HZ}hz"
+fi
+eval $CMD & python src/main.py 
+trap "kill 0" SIGINT SIGTERM EXIT
