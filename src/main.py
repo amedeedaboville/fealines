@@ -1,8 +1,10 @@
-from pyqtgraph.Qt import QtGui, QtCore
 import signal
-import sys
+
+from pyqtgraph.Qt import QtGui
+
 from muselo import *
-from feaProtocol import Protocol, Step
+from Protocol.feaProtocol import Protocol
+
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class MainWindow(QtGui.QMainWindow):
