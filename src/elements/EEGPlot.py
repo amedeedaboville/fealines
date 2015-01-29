@@ -21,7 +21,7 @@ class EEGPlot:
         bands = ['alpha', 'beta', 'delta', 'gamma', 'theta']
         for line in self.lines:
             self.data[line] = []
-            self.plot_data[line] = np.empty(100)
+            self.plot_data[line] = np.zeros(100)
             self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line], pen=(0, 255, 0, 100))
 
             #For now we register listeners on the paths of both muse-player versions: 3.4 and 3.6
