@@ -1,4 +1,4 @@
-from feaProtocol import *
+from Protocol.feaProtocol import *
 class TestProtocol:
 
     # def setup(self):
