@@ -28,8 +28,8 @@ class Protocol:
 
     def end(self):
         print "protocol ended. Data:"
-        file = open("./recordings/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S"), "w+")
-        json.dump(file, self.session)
+        with open("./recordings/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S"), "w+") as file:
+            json.dump(self.session, file)
         print self.session
 
     def end_step(self, data_dict):
