@@ -1,6 +1,6 @@
 #!/bin/bash
 HZ="50"
-DEFAULT_TEST=./recordings/test/3min.muse
+DEFAULT_TEST=./recordings/test/3mins.muse
 USAGE="Here are the command line options: `basename $0` [-hv] [-t [test_name]]"
 while getopts :vht OPT; do
     case "$OPT" in
