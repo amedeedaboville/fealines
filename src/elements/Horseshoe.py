@@ -5,7 +5,14 @@ class HorseshoeWidget(QtGui.QWidget):
         super(HorseshoeWidget, self).__init__()
         self.horseshoe = [0, 0, 0, 0]
         self.forehead = 0
-        self.labels = [QtGui.QLabel() for img in self.horseshoe]
+        self.layout = QtGui.QHBoxLayout()
+        self.labels = []
+
+        for img in self.horseshoe:
+            new_label = QtGui.QLabel()
+            self.labels.append(new_label)
+            self.layout.addWidget(new_label)
+        self.setLayout(self.layout)
 
         # self.setGeometry(300, 300, 350, 100)
         self.resize(300, 300)
@@ -34,4 +41,4 @@ class HorseshoeWidget(QtGui.QWidget):
             qimage = QtGui.QImage()
             qimage.load("./img/horseshoe/horseshoe.png")
             pixmap = QtGui.QPixmap.fromImage(qimage)
-            label.setPixmaap(pixmap)
+            label.setPixmap(pixmap)

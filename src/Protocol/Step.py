@@ -35,6 +35,7 @@ class Step(object):
 
     def startStep(self, callback):
         self.timer.start()
+        self.horseshoe.start()
         self.plot.start()
         self.callback = callback
         return self.widget
