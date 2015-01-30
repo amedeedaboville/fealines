@@ -38,7 +38,8 @@ def main():
     app = QtGui.QApplication(sys.argv)
     main = MainWindow()
     main.executeProtocol()
-    sys.exit(app.exec_())
+    app.exec_()
+    sys.exit(0)
 
 if __name__ == '__main__':
     main()
