@@ -50,9 +50,9 @@ class EEGPlot:
     def get_widget(self):
         return self.pw
 
-    def receive_band(self, line, args):
+    def receive_band(self, line, path, args):
         signal_number = int(line[-1])
-        new_dp = args[1][signal_number]  # args is [band_name, [left_ear, left_forehead, right_forehead, right_ear]]
+        new_dp = args[signal_number]  # args is [band_name, [left_ear, left_forehead, right_forehead, right_ear]]
         self.update_dp(line, new_dp)
 
     def receive_fea(self, path, args):
