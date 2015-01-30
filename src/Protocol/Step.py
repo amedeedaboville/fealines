@@ -3,17 +3,17 @@ from elements.TimerWidget import TimerWidget
 from pyqtgraph import QtGui
 
 
-class Step:
+class Step(object):
     def __init__(self, props):
         self.record = (props['record'] == 'true') or True
-        if props['duration'] is not None:
+        if 'duration' in props:
             times = [int(x) for x in props['duration'].split(":")]
             self.duration = times[0]*3600 + times[1]*60 + times[2]
         else:
             self.duration = 600
 
-        self.graph = props['graph'] or 'all'
-        self.name = props['name'] or ""
+        self.graph = props['graph'] if 'graph' in props else 'all'
+        self.name = props['name'] if 'name' in props else ''
 
         self.data_dict = {"name": self.name}
 

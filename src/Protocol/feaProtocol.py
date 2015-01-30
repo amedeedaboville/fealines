@@ -1,13 +1,20 @@
 import json
 import datetime
 from pyqtgraph import QtGui
+from Step import Step
+from CalibrationStep import CalibrationStep
 
 
 class Protocol:
     def __init__(self, fileName):
         with open(fileName) as contents:
             json_protocol = json.load(contents)
-            self.steps = [Step(step) for step in json_protocol]
+            self.steps = []
+            for step in json_protocol:
+                if step['name'] == 'calibration':
+                    self.steps.append(CalibrationStep(step))
+                else:
+                    self.steps.append(Step(step))
 
         self.session = {
             'num_steps': len(self.steps),
@@ -27,10 +34,15 @@ class Protocol:
         return self.main_widget
 
     def end(self):
-        print "protocol ended. Data:"
         with open("./recordings/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S"), "w+") as file:
-            json.dump(self.session, file)
+            json.dump(self.session, file, default=self.default_serializer)
+        print "protocol ended. Data:"
         print self.session
+
+    def default_serializer(self, obj):
+      if isinstance(obj, datetime.datetime):
+        serial = obj.isoformat()
+        return serial
 
     def end_step(self, data_dict):
         self.session['steps'].append({})
