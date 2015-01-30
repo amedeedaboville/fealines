@@ -1,5 +1,6 @@
 from elements.EEGPlot import EEGPlot
 from elements.TimerWidget import TimerWidget
+from elements.Horseshoe import HorseshoeWidget
 from pyqtgraph import QtGui
 
 
@@ -18,14 +19,16 @@ class Step(object):
         self.data_dict = {"name": self.name}
 
         self.timer = TimerWidget(self.duration, self.endStep)
+        self.horseshoe = HorseshoeWidget()
 
         self.widget = QtGui.QWidget()
         self.grid = QtGui.QGridLayout()
         self.grid.addWidget(self.timer, 1, 1)
+        self.grid.addWidget(self.horseshoe, 1, 2)
 
         if self.graph is not None:
             self.plot = EEGPlot(self.graph)
-            self.grid.addWidget(self.plot.pw, 1, 2)
+            self.grid.addWidget(self.plot.pw, 1, 3)
 
         self.widget.setLayout(self.grid)
         self.data_widgets = {'plot': self.plot} # TODO: Add other kinds of data widgets like checkboxes
