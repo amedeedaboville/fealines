@@ -1,14 +1,13 @@
 [{
-    "name":"test 1",
-    "record":"true",
-    "graph":"fea",
-    "duration":"00:00:01"
+    "name":"whatever",
+    "type":"calibration",
+    "record":"true"
     },
     {
     "name":"test 2",
     "record":"true",
     "graph":"fea",
-    "duration":"00:00:01"
+    "duration":"00:00:05"
     }
 ]
 
