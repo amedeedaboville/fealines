@@ -33,8 +33,31 @@ some device info...
 So far I am going to have each Step Element (graphs, inputs like checkboxes, text) save their own data.
 
 ###TODO
-* save data files properly.
-    * + write down a json schema for data files
-* test interactions between steps of a protocol
-    * + write down a json schema for protocol files (later)
 * make a calibration step
+Ability to play sound during a step
+draw connection horeshoe
+save connection
+make an "adjust the headband until connection is good step?"
+
+Brainstorming section
+--------------------
+Nothing official here, just my brainstorming.
+
+Use Cases
+------
+Short brain activity recordings
+    Short samples. Record a lot of these. For example, plot fea over a year.
+    over a couple months after starting meditation/exercise/coffee
+    accumulated over a day after coffee
+Biofeedback
+
+Features needed
+---------------
+play sounds in a step
+* not sure if I'll implement this
+connection step
+* working on this
+calibration step
+* passable
+full recording format
+different biofeedback options
