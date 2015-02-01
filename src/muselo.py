@@ -11,8 +11,6 @@ class MuseServer(ServerThread):
         if path in self.listeners:
             for listener in self.listeners[path]:
                 listener(path, args)
-        l_ear, l_forehead, r_forehead, r_ear = args
-        print "%s %f %f %f %f" % (path, l_ear, l_forehead, r_forehead, r_ear)
 
     def register_listener(self, signal, listener):
         if signal not in self.listeners:
