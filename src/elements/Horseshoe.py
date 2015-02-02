@@ -3,7 +3,7 @@ from pyqtgraph.Qt import QtCore, QtGui
 import muselo
 
 
-class HorseshoeWidget(QtGui.QWidget):
+class HorseshoeWidget(QtGui.QFrame):
 
     trigger = pyqtSignal()
 
@@ -24,7 +24,7 @@ class HorseshoeWidget(QtGui.QWidget):
             self.layout.addWidget(new_label)
         self.setLayout(self.layout)
 
-        self.setStyleSheet("background-image: ./img/horseshoe/horseshoe.png")
+        self.setStyleSheet("HorseshoeWidget{background-image:  url('./img/horseshoe/horseshoe.png');}")
 
         # self.setGeometry(300, 300, 350, 100)
         self.resize(300, 300)
