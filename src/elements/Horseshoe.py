@@ -1,14 +1,22 @@
+from PyQt4.QtCore import pyqtSignal
 from pyqtgraph.Qt import QtCore, QtGui
 import muselo
+
+
 class HorseshoeWidget(QtGui.QWidget):
+
+    trigger = pyqtSignal()
+
     def __init__(self):
         super(HorseshoeWidget, self).__init__()
         self.horseshoe = [0, 0, 0, 0]
         self.forehead = 0
         self.layout = QtGui.QHBoxLayout()
         self.labels = []
-        self.qimages = [QtGui.QImage() for x in self.horseshoe]
         self.colors = []
+
+        self.trigger.connect(self.update_labels)
+        self.load_pixmaps()
 
         for idx in self.horseshoe:
             new_label = QtGui.QLabel()
@@ -31,36 +39,39 @@ class HorseshoeWidget(QtGui.QWidget):
         muselo.server.remove_listener('/muse/elements/touching_forehead', self.receive_forehead)
 
     def load_pixmaps(self):
-        self.pixmaps = []
+        descs = ['good', 'ok', 'bad']
+        self.pixmaps = {'good':[], 'ok':[], 'bad':[]}
+        self.qimages = {'good':[], 'ok':[], 'bad':[]}
         for idx in range(4):
-            for desc in ['good', 'ok', 'bad']:
+            for desc in descs:
                 filename = "./img/horseshoe/%s-%s.png" % (idx, desc)
-                q = QtGui.QImage()
-                self.qimages[idx].load(filename)
-                self.pixmaps[idx] = QtGui.QPixmap.fromImage(qimage)
-                self.pixmaps[desc][idx] = QtGui.QPixmap()
+                self.qimages[desc].append(QtGui.QImage())
+                self.qimages[desc][idx].load(filename)
+                self.pixmaps[desc].append(QtGui.QPixmap.fromImage(self.qimages[desc][idx]))
 
 
     def receive_horseshoe(self, path, args):
         print "horseshoe"
         print path, args
-        if path == 'muse/elements/horseshoe/':
-            self.horseshoe = [int(arg) for arg in args]
-        self.update_labels()
+        self.horseshoe = [int(arg) for arg in args]
+        self.trigger.emit()
 
     def receive_forehead(self, path, args):
         print 'forehead'
-        if path == 'muse/elements/touching_forehead/':
-            self.forehead = int(args[0])
-        self.update_labels()
+        self.forehead = int(args[0])
+        self.trigger.emit()
 
     def update_labels(self):
         print "labels"
         for idx,number in enumerate(self.horseshoe):
             if number == 1:
                 desc = 'good'
+                self.labels[idx].setPixmap(self.pixmaps[desc][idx])
             elif number == 2:
                 desc = 'ok'
+                self.labels[idx].setPixmap(self.pixmaps[desc][idx])
             else:
                 desc = 'bad'
-            self.labels[idx].setPixmap(self.pixmaps[desc][idx])
+                # self.labels[idx].setPixmap(None)
+                self.labels[idx].setPixmap(self.pixmaps['good'][idx])
+            print idx, number, desc
