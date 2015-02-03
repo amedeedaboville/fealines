@@ -8,8 +8,8 @@ class HorseshoeWidget(QtGui.QLabel):
 
     trigger = pyqtSignal()
 
-    def __init__(self):
-        super(HorseshoeWidget, self).__init__()
+    def __init__(self, parent):
+        super(HorseshoeWidget, self).__init__(parent)
         self.horseshoe = [0, 0, 0, 0]
         self.forehead = 0
         self.layout = QtGui.QGridLayout()
