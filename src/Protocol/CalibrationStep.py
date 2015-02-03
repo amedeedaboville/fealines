@@ -11,15 +11,16 @@ class CalibrationStep(Step):
     """
     def __init__(self, props):
         super(CalibrationStep, self).__init__(props)
+        self.word_count = 0
+
         with open('protocols/dictionary.txt') as f:
             self.words = f.read().splitlines()
         self.say_timer = QtCore.QTimer()
 
-        self.word_count = 0
+    def startStep(self, callback):
+        super(Step, self).start(callback)
         self.say_instructions()
-
         self.say_timer.singleShot(1 * 1000, self.next_word)
-
 
     def say_instructions(self):
         instructions = "When you hear each category, try to think of as many things that belong in that category"
