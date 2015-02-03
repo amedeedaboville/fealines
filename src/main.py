@@ -16,7 +16,7 @@ class MainWindow(QtGui.QMainWindow):
         closeAction = QtGui.QAction('Close', self)
         closeAction.setShortcut('Ctrl+Q')
         closeAction.setStatusTip('Close Application')
-        closeAction.triggered.connect(self.close)
+        closeAction.triggered.connect(quit)
 
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
