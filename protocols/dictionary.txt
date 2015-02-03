@@ -3,9 +3,13 @@ occupations
 songs
 books
 desserts
-articles of clothings
+articles of clothing
 bodies of water
 historical figures
 sports
 countries
-
+colors
+toys
+artists
+countries
+animals
