@@ -3,6 +3,7 @@ import datetime
 from pyqtgraph import QtGui
 from Step import Step
 from CalibrationStep import CalibrationStep
+from ConnectionStep import ConnectionStep
 
 
 class Protocol:
@@ -11,8 +12,10 @@ class Protocol:
             json_protocol = json.load(contents)
             self.steps = []
             for step in json_protocol:
-                if step['name'] == 'calibration':
+                if step['type'] == 'calibration':
                     self.steps.append(CalibrationStep(step))
+                elif step['type'] == 'connection':
+                    self.steps.append(ConnectionStep(step))
                 else:
                     self.steps.append(Step(step))
 
