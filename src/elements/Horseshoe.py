@@ -13,7 +13,7 @@ class HorseshoeWidget(QtGui.QLabel):
         self.horseshoe = [0, 0, 0, 0]
         self.forehead = 0
         self.layout = QtGui.QGridLayout()
-        self.labels = [0, 0, 0, 0]
+        self.labels = [0] * 5
         self.colors = []
 
         self.trigger.connect(self.update_labels)
@@ -51,37 +51,39 @@ class HorseshoeWidget(QtGui.QLabel):
         descs = ['good', 'ok', 'bad']
         self.pixmaps = {'good':[], 'ok':[], 'bad':[]}
         self.qimages = {'good':[], 'ok':[], 'bad':[]}
-        for idx in range(4):
+        for idx in range(5):
             for desc in descs:
-                filename = "./img/horseshoe/%s-%s.png" % (idx, desc)
+                filename = "./img/horseshoe/%d-%s.png" % (idx, desc)
                 self.qimages[desc].append(QtGui.QImage())
                 self.qimages[desc][idx].load(filename)
                 self.pixmaps[desc].append(QtGui.QPixmap.fromImage(self.qimages[desc][idx]))
 
 
     def receive_horseshoe(self, path, args):
-        print "horseshoe"
         print path, args
         self.horseshoe = [int(arg) for arg in args]
         self.trigger.emit()
 
     def receive_forehead(self, path, args):
-        print 'forehead'
+        print "receiving forehead"
         self.forehead = int(args[0])
         self.trigger.emit()
 
+    def read_description(self, number):
+        if number == 1:
+            desc = 'good'
+        elif number == 2:
+            desc = 'ok'
+        else:
+            desc = 'bad'
+        return desc
+
     def update_labels(self):
         print "labels"
-        for idx,number in enumerate(self.horseshoe):
-            if number == 1:
-                desc = 'good'
-            elif number == 2:
-                desc = 'ok'
-            else:
-                desc = 'bad'
+        for idx, number in enumerate(self.horseshoe + [self.forehead]):
+            desc = self.read_description(number)
+            desc = random.choice(['bad', 'ok', 'good']) #for debugging
             print idx, desc
-            #for debugging:
-            desc = random.choice(['bad', 'ok', 'good'])
             self.labels[idx] = self.pixmaps[desc][idx]
         self.repaint()
 
