@@ -73,27 +73,21 @@ class HorseshoeWidget(QtGui.QLabel):
     def update_labels(self):
         print "labels"
         for idx,number in enumerate(self.horseshoe):
+            if number == 1:
+                desc = 'good'
+            elif number == 2:
+                desc = 'ok'
+            else:
+                desc = 'bad'
+            print idx, desc
+            #for debugging:
             desc = random.choice(['bad', 'ok', 'good'])
             self.labels[idx] = self.pixmaps[desc][idx]
-            # if number == 1:
-            #     desc = 'good'
-            #     self.labels[idx] = self.pixmaps[desc][idx]
-            # elif number == 2:
-            #     desc = 'ok'
-            #     self.labels[idx] = self.pixmaps[desc][idx]
-            # else:
-            #     desc = 'bad'
-            #     self.labels[idx] = self.pixmaps['good'][idx]
-            print idx, desc
         self.repaint()
 
     def paintEvent(self, event):
         qp = QtGui.QPainter()
         qp.begin(self)
-        qp.setCompositionMode(QtGui.QPainter.CompositionMode_SourceAtop)
-        qp.setBackgroundMode(0)
-        qp.setBrush(QtGui.QColor(255, 255, 255, 200))
-        qp.drawRect(0, 0, 84, 84)
         for img in self.labels:
             qp.drawPixmap(0, 0, 84, 84, img)
         qp.end()
