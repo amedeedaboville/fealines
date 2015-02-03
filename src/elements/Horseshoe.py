@@ -20,23 +20,11 @@ class HorseshoeWidget(QtGui.QLabel):
         self.load_pixmaps()
         self.update_labels()
 
-        # self.labels = [ QtGui.QLabel() for idx in self.horseshoe]
-        # The row/columns are:
-        # 1 | fore  |2
-        # 0 |    |3
-        # self.layout.addWidget(self.labels[0], 1, 0)
-        # self.layout.addWidget(self.labels[1], 0, 0)
-        # self.layout.addWidget(self.labels[2], 0, 3)
-        # self.layout.addWidget(self.labels[3], 1, 3)
-        # self.setLayout(self.layout)
-
         self.setStyleSheet("""HorseshoeWidget {
         border-image:  url('./img/horseshoe/horseshoe.png');
         background-repeat: no-repeat; }""")
 
-        # self.setGeometry(300, 300, 350, 100)
         self.setFixedSize(84, 84)
-
         self.show()
 
     def start(self):
@@ -58,14 +46,11 @@ class HorseshoeWidget(QtGui.QLabel):
                 self.qimages[desc][idx].load(filename)
                 self.pixmaps[desc].append(QtGui.QPixmap.fromImage(self.qimages[desc][idx]))
 
-
     def receive_horseshoe(self, path, args):
-        print path, args
         self.horseshoe = [int(arg) for arg in args]
         self.trigger.emit()
 
     def receive_forehead(self, path, args):
-        print "receiving forehead"
         self.forehead = int(args[0])
         self.trigger.emit()
 
@@ -79,11 +64,9 @@ class HorseshoeWidget(QtGui.QLabel):
         return desc
 
     def update_labels(self):
-        print "labels"
         for idx, number in enumerate(self.horseshoe + [self.forehead]):
             desc = self.read_description(number)
             desc = random.choice(['bad', 'ok', 'good']) #for debugging
-            print idx, desc
             self.labels[idx] = self.pixmaps[desc][idx]
         self.repaint()
 
