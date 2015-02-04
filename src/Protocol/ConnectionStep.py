@@ -1,16 +1,15 @@
 from Step import Step
 from pyqtgraph.Qt import QtGui, QtCore
+from PyQt4.QtCore import pyqtSignal
 import muselo
 
 
 class ConnectionStep(Step):
     """
-    A calibration step which asks users to list members of categories.
-    This is similar to the one in the Calm app.
+    A connection step which waits for all sensors to have good signal for 10 seconds.
     """
     def __init__(self, props):
         super(ConnectionStep, self).__init__(props)
-        # self.say_timer = QtCore.QTimer()
 
         self.time_to_finish = 10
         self.f_widget = QtGui.QWidget()
