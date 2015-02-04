@@ -49,20 +49,4 @@ class ConnectionStep(Step):
             else:
                 bar.setValue(0)
         if good == 4:
-            self.done()
-
-    # def paintEvent(self, QPaintEvent):
-    #     qp = QtGui.QPainter()
-    #     qp.begin(self)
-    #     height = 30
-    #     width  = 100
-    #
-    #     current_x = 100
-    #     current_y = 100
-    #     color = QtGui.QColor(0, 0, 0)
-    #     color.setNamedColor('#d4d4d4')
-    #     qp.setPen(color)
-    #     for i in range(5):
-    #         qp.drawRect(current_x, current_y, width, height)
-    #         current_y += 50
-    #     qp.end()
+            self.endStep()
