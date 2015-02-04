@@ -1,7 +1,6 @@
 from Step import Step
-import random
-from os import system
-from pyqtgraph.Qt import QtCore, QtGui
+from pyqtgraph.Qt import QtGui, QtCore
+import muselo
 
 
 class ConnectionStep(Step):
@@ -12,43 +11,61 @@ class ConnectionStep(Step):
     def __init__(self, props):
         super(ConnectionStep, self).__init__(props)
         # self.say_timer = QtCore.QTimer()
-        self.fwidget = FillWidget()
+        self.fwidget = FillWidget(self.endStep)
         self.grid.addWidget(self.fwidget)
-        print "fwidget initialized"
 
 class FillWidget(QtGui.QWidget):
-    def __init__(self):
+    """
+    A widget that
+    """
+    def __init__(self, callback):
         super(FillWidget, self).__init__()
+        self.done = callback
+        self.layout = QtGui.QVBoxLayout()
+        self.progress_bars = [QtGui.QProgressBar() for _ in range(4)]
+        self.timers = [QtCore.QElapsedTimer() for _ in range(4)]
+        for bar in self.progress_bars:
+            bar.setMinimum(0)
+            bar.setMaximum(2000)
+            self.layout.addWidget(bar)
 
-    def paintEvent(self, QPaintEvent):
-        qp = QtGui.QPainter()
-        qp.begin(self)
+        self.setLayout(self.layout)
 
-        self.draw_bg_rects(qp)
-        # color = QtGui.QColor(0, 0, 0)
-        # color.setNamedColor('#d4d4d4')
-        # qp.setPen(color)
-        #
-        # qp.setBrush(QtGui.QColor(200, 0, 0))
-        # qp.drawRect(10, 15, 90, 60)
-        #
-        # qp.setBrush(QtGui.QColor(255, 80, 0, 160))
-        # qp.drawRect(130, 15, 90, 60)
-        #
-        # qp.setBrush(QtGui.QColor(25, 0, 90, 200))
-        # qp.drawRect(250, 15, 90, 60)
+        muselo.server.register_listener('/muse/elements/horseshoe', self.receive_horseshoe)
 
-        qp.end()
+    def receive_horseshoe(self, path, args):
+        good = 0
+        for conn, timer in zip(args, self.timers):
+            print conn
+            if conn == 1 : #good
+                if not timer.isValid():
+                    timer.start()
+                else:
+                    print "Timer is still good, elapsed: %d" % (timer.elapsed())
+                    if timer.elapsed() > 2000:
+                        good += 1
+            else:
+                timer.invalidate()
+        for bar, timer in zip(self.progress_bars, self.timers):
+            if timer.isValid():
+                bar.setValue(timer.elapsed())
+            else:
+                bar.setValue(0)
+        if good == 4:
+            self.done()
 
-
-    def draw_bg_rects(self, qp):
-        height = 30
-        width  = 100
-        current_x = 100
-        current_y = 100
-        color = QtGui.QColor(0, 0, 0)
-        color.setNamedColor('#d4d4d4')
-        qp.setPen(color)
-        for i in range(5):
-            qp.drawRect(current_x, current_y, width, height)
-            current_y += 50
+    # def paintEvent(self, QPaintEvent):
+    #     qp = QtGui.QPainter()
+    #     qp.begin(self)
+    #     height = 30
+    #     width  = 100
+    #
+    #     current_x = 100
+    #     current_y = 100
+    #     color = QtGui.QColor(0, 0, 0)
+    #     color.setNamedColor('#d4d4d4')
+    #     qp.setPen(color)
+    #     for i in range(5):
+    #         qp.drawRect(current_x, current_y, width, height)
+    #         current_y += 50
+    #     qp.end()
