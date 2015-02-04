@@ -19,10 +19,14 @@ class ConnectionStep(Step):
 
         for timer in self.timers:
             timer.invalidate()
+
         for bar in self.progress_bars:
             bar.setMinimum(0)
             bar.setMaximum(self.time_to_finish)
             self.f_layout.addWidget(bar)
+
+        self.trigger = SenderObject()
+        self.trigger.update_bars.connect(self.update_bars)
 
         self.f_widget.setLayout(self.f_layout)
         self.grid.addWidget(self.f_widget)
@@ -33,7 +37,7 @@ class ConnectionStep(Step):
         good = 0
         for idx, (conn, timer) in enumerate(zip(args, self.timers)):
             print conn, idx
-            if conn == 1 or idx == 3: #good
+            if conn == 1:
                 if not timer.isValid():
                     timer.start()
                 else:
@@ -42,10 +46,17 @@ class ConnectionStep(Step):
                         good += 1
             else:
                 timer.invalidate()
+        self.trigger.update_bars.emit()
+        if good == 4:
+            self.endStep()
+
+    def update_bars(self):
         for bar, timer in zip(self.progress_bars, self.timers):
             if timer.isValid():
                 bar.setValue(timer.elapsed() / 1e3)
             else:
                 bar.setValue(0)
-        if good == 4:
-            self.endStep()
+
+
+class SenderObject(QtGui.QWidget): #Hack to send signal from non-QObject class
+    update_bars = pyqtSignal()
