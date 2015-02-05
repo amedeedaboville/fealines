@@ -20,11 +20,16 @@ class ConnectionStep(Step):
         for timer in self.timers:
             timer.invalidate()
 
+        self.title_label = QtGui.QLabel("Adjust the Headband until all of the bars are full")
+        self.title_label.setMaximumHeight(100)
+        self.f_layout.addWidget(self.title_label)
         self.colors = ["#ea6a1f", "#009986", "#555c99", "#d20e8a"]
         for bar, color in zip(self.progress_bars, self.colors):
             bar.setMinimum(0)
             bar.setMaximum(self.time_to_finish)
-            bar.setStyleSheet(u" QProgressBar::chunk {{ background: {0:s}; }}".format(color));
+            bar.setTextVisible(False)
+            bar.setStyleSheet((u' QProgressBar::chunk {{ background: {0:s}; }}' +
+                               u' QProgressBar {{border: 1px solid gray}}').format(color));
 
             self.f_layout.addWidget(bar)
 
