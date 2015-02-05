@@ -18,7 +18,7 @@ class CalibrationStep(Step):
         self.say_timer = QtCore.QTimer()
 
     def startStep(self, callback):
-        super(Step, self).start(callback)
+        super(Step, self).startStep(callback)
         self.say_instructions()
         self.say_timer.singleShot(1 * 1000, self.next_word)
 
