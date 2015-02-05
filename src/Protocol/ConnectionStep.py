@@ -20,9 +20,12 @@ class ConnectionStep(Step):
         for timer in self.timers:
             timer.invalidate()
 
-        for bar in self.progress_bars:
+        self.colors = ["#ea6a1f", "#009986", "#555c99", "#d20e8a"]
+        for bar, color in zip(self.progress_bars, self.colors):
             bar.setMinimum(0)
             bar.setMaximum(self.time_to_finish)
+            bar.setStyleSheet(u" QProgressBar::chunk {{ background: {0:s}; }}".format(color));
+
             self.f_layout.addWidget(bar)
 
         self.trigger = SenderObject()
