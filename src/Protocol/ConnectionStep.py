@@ -27,6 +27,7 @@ class ConnectionStep(Step):
 
         self.trigger = SenderObject()
         self.trigger.update_bars.connect(self.update_bars)
+        self.trigger.end_connection.connect(self.end_connection)
 
         self.f_widget.setLayout(self.f_layout)
         self.grid.addWidget(self.f_widget)
@@ -48,7 +49,7 @@ class ConnectionStep(Step):
                 timer.invalidate()
         self.trigger.update_bars.emit()
         if good == 4:
-            self.endStep()
+            self.trigger.end_connection.emit()
 
     def update_bars(self):
         for bar, timer in zip(self.progress_bars, self.timers):
@@ -57,6 +58,16 @@ class ConnectionStep(Step):
             else:
                 bar.setValue(0)
 
+    def end_connection(self):
+        muselo.server.remove_listener('/muse/elements/horseshoe', self.receive_horseshoe)
+        self.f_widget.close()
+        self.grid.removeWidget(self.f_widget)
+        self.next_button = QtGui.QPushButton()
+        self.next_button.setText("Press Here to Continue")
+        self.next_button.clicked.connect(self.endStep)
+        self.grid.addWidget(self.next_button)
+
 
 class SenderObject(QtGui.QWidget): #Hack to send signal from non-QObject class
     update_bars = pyqtSignal()
+    end_connection = pyqtSignal()
