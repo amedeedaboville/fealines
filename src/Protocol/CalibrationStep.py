@@ -12,12 +12,15 @@ class CalibrationStep(Step):
     """
     def __init__(self, props):
         if 'duration' not in props:
-            props['duration'] = '00:01:00'
+            props['duration'] = '00:00:30'
         super(CalibrationStep, self).__init__(props)
-        self.word_count = 0
+        self.num_words = 4
+        self.words_said = 0
 
         with open('protocols/dictionary.txt') as f:
-            self.words = f.read().splitlines()
+            words = f.read().splitlines()
+        self.words_to_say = random.sample(words, self.num_words)
+
         self.say_timer = QtCore.QTimer()
 
     def startStep(self, callback):
@@ -34,17 +37,14 @@ class CalibrationStep(Step):
         self.say_string(instructions)
 
     def say_word(self):
-        word = random.choice(self.words)
+        word = self.words_to_say[self.words_said]
         self.say_string(word)
 
     def next_word(self):
-        if self.word_count < 5:
-            self.word_count += 1
+        if self.words_said < self.num_words:
             self.say_word()
+            self.words_said += 1
             self.say_timer.singleShot(2 * 1000, self.next_word)
-        else:
-            print "calibration almost over"
-            self.say_timer.singleShot(5 * 1000, self.endStep)
 
     def say_string(self, string):
         subprocess.Popen(["say", string])
