@@ -3,7 +3,7 @@ import signal
 from pyqtgraph.Qt import QtGui
 
 from muselo import *
-from Protocol.feaProtocol import Protocol
+from Protocol.feaProtocol import Protocol, ProtocolNotLoaded
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -30,9 +30,13 @@ class MainWindow(QtGui.QMainWindow):
         self.show()
 
     def executeProtocol(self):
-        self.pcl = Protocol('./protocols/test.json')
-        self.central_widget = self.pcl.start()
-        self.setCentralWidget(self.central_widget)
+        try:
+            self.pcl = Protocol('./protocols/default.json')
+            self.central_widget = self.pcl.start()
+            self.setCentralWidget(self.central_widget)
+        except ProtocolNotLoaded:
+            pass
+
 
 def main():
     app = QtGui.QApplication(sys.argv)

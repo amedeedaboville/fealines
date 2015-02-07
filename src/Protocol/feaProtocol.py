@@ -9,7 +9,14 @@ from ConnectionStep import ConnectionStep
 class Protocol:
     def __init__(self, fileName):
         with open(fileName) as contents:
-            json_protocol = json.load(contents)
+            try:
+                json_protocol = json.load(contents)
+            except ValueError as e:
+                print "Protocol file could not be loaded. It might have a typo."
+                print "This is the error code the file gave us:"
+                print e
+                raise ProtocolNotLoaded
+
             self.steps = []
             for step in json_protocol:
                 if step['type'] == 'calibration':
@@ -67,3 +74,7 @@ class Protocol:
             self.end()
 
 
+class ProtocolNotLoaded(Exception):
+
+     def __str__(self):
+         return "ProtocolNotLoaded Error"
