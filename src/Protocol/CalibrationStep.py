@@ -11,6 +11,8 @@ class CalibrationStep(Step):
     This is similar to the one in the Calm app.
     """
     def __init__(self, props):
+        if 'duration' not in props:
+            props['duration'] = '00:01:00'
         super(CalibrationStep, self).__init__(props)
         self.word_count = 0
 
@@ -26,10 +28,6 @@ class CalibrationStep(Step):
         self.say_instructions()
         self.say_timer.singleShot(1 * 7000, self.next_word)
         return self.widget
-
-    def endStep(self):
-        super(Step, self).endStep()
-        self.thread.quit()
 
     def say_instructions(self):
         instructions = "When you hear each category, try to think of as many things that belong in that category"
@@ -50,4 +48,3 @@ class CalibrationStep(Step):
 
     def say_string(self, string):
         subprocess.Popen(["say", string])
-        # system(u'say "{0:s}"'.format(string))
