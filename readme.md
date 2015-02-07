@@ -3,6 +3,27 @@
 
 The name comes from Frontal EEG Asymmetry (fea). One of the uses of this app is to plot the FEA.
 
+#Install
+---------
+Only tested on OSX so far. Should work fine on linux with minimal changes. Possible to use on windows.
+## Dependencies
+Sadly there is no one-click install. You will have to install pyqt:
+```
+brew install sip
+brew install pyqt
+```
+You also need pyliblo:
+```
+pip install pyliblo
+```
+##Installing
+```
+git clone git@github.com:amedeedaboville/fealines.git
+cd fealines
+python setup.py install
+
+```
+
 ###Protocols
 --------
 A protocol is a series of steps for (eg) an experiment.
