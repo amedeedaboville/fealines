@@ -1,4 +1,21 @@
-[{
+[
+{
+    "name":"connect1",
+    "type":"connection",
+    "next_button":"true"
+},
+{
+    "name":"calibration",
+    "type":"calibration",
+    "record":"true",
+    "next_button":"true"
+},
+{
+    "name":"connect2",
+    "type":"connection",
+    "next_button":"true"
+},
+    {
     "name":"collect",
     "record":"true",
     "graph":"fea",
