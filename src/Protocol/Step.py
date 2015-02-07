@@ -35,7 +35,7 @@ class Step(QtCore.QObject):
         if 'next_button' in props:
             self.has_next_button = (props['next_button'] == 'true')
         else:
-            self.show_timer = True
+            self.has_next_button = True
 
     def initUI(self):
         self.widget = QtGui.QWidget()
@@ -69,12 +69,11 @@ class Step(QtCore.QObject):
             for name, widget in self.data_widgets.iteritems():
                 self.data_dict[name] = widget.serialize()
         if self.has_next_button:
-            self.grid.removeWidget(self.widget)
+            for i in range(self.grid.count()): self.grid.itemAt(i).widget().close() # clear the layout
             self.next_button = QtGui.QPushButton()
             self.next_button.setText("Press to Continue")
-            self.next_button.clicked.connect(self.endStep)
-            self.grid.addWidget(self.next_button)
             self.next_button.clicked.connect(lambda: self.callback(self.data_dict))
+            self.grid.addWidget(self.next_button)
         else:
             self.callback(self.data_dict)
 
