@@ -1,5 +1,6 @@
 import signal
 
+
 from PyQt4.QtGui import QMainWindow, QAction, QLabel, QApplication
 from muselo import *
 from Protocol.feaProtocol import Protocol, ProtocolNotLoaded
@@ -15,7 +16,7 @@ class MainWindow(QMainWindow):
         closeAction = QAction('Close', self)
         closeAction.setShortcut('Ctrl+Q')
         closeAction.setStatusTip('Close Application')
-        closeAction.triggered.connect(quit)
+        closeAction.triggered.connect(lambda: sys.exit(0))
 
         loadAction = QAction('Load Protocol', self)
         loadAction.setStatusTip('Load the Default Protocol')
