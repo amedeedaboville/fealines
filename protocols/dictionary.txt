@@ -1,15 +1,19 @@
-spices
-occupations
-songs
-books
-desserts
-articles of clothing
-bodies of water
-historical figures
-sports
-countries
-colors
-toys
-artists
-countries
 animals
+articles of clothing
+artists
+bodies of water
+body parts
+books
+celebrities
+colors
+countries
+desserts
+historical figures
+hobbies
+jobs
+languages
+musical instruments
+songs
+spices
+sports
+toys
