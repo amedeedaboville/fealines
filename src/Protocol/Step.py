@@ -68,4 +68,13 @@ class Step(QtCore.QObject):
         if self.record:
             for name, widget in self.data_widgets.iteritems():
                 self.data_dict[name] = widget.serialize()
-        self.callback(self.data_dict)
+        if self.has_next_button:
+            self.grid.removeWidget(self.widget)
+            self.next_button = QtGui.QPushButton()
+            self.next_button.setText("Press to Continue")
+            self.next_button.clicked.connect(self.endStep)
+            self.grid.addWidget(self.next_button)
+            self.next_button.clicked.connect(lambda: self.callback(self.data_dict))
+        else:
+            self.callback(self.data_dict)
+
