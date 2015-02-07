@@ -47,12 +47,10 @@ class ConnectionStep(Step):
     def receive_horseshoe(self, path, args):
         good = 0
         for idx, (conn, timer) in enumerate(zip(args, self.timers)):
-            print conn, idx
             if conn == 1:
                 if not timer.isValid():
                     timer.start()
                 else:
-                    print "Timer is still good, elapsed: %f" % (timer.elapsed() / 1e3)
                     if timer.elapsed() / 1e3 > self.time_to_finish:
                         good += 1
             else:
