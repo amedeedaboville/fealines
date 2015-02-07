@@ -37,7 +37,7 @@ class ConnectionStep(Step):
             self.f_layout.addWidget(bar)
 
         self.update_bars_signal.connect(self.update_bars)
-        self.end_connection_signal.connect(self.end_connection)
+        self.end_connection_signal.connect(self.endStep)
 
         self.f_widget.setLayout(self.f_layout)
         self.grid.addWidget(self.f_widget)
@@ -68,12 +68,15 @@ class ConnectionStep(Step):
             else:
                 bar.setValue(0)
 
-    def end_connection(self):
+    def endStep(self):
         muselo.server.remove_listener('/muse/elements/horseshoe', self.receive_horseshoe)
         self.f_widget.close()
-        self.grid.removeWidget(self.f_widget)
-        self.next_button = QtGui.QPushButton()
-        self.next_button.setText("Press Here to Continue")
-        self.next_button.clicked.connect(self.endStep)
-        self.grid.addWidget(self.next_button)
+        super(ConnectionStep, self).endStep()
+
+    # def end_connection(self):
+    #     self.grid.removeWidget(self.f_widget)
+    #     self.next_button = QtGui.QPushButton()
+    #     self.next_button.setText("Press Here to Continue")
+    #     self.next_button.clicked.connect(self.endStep)
+    #     self.grid.addWidget(self.next_button)
 
