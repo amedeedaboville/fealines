@@ -63,7 +63,6 @@ class Step(QObject):
         if self.graph:
             self.plot.start()
         self.callback = callback
-        return self.widget
 
     def endStep(self):
         if self.graph:

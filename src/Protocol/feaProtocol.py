@@ -43,7 +43,8 @@ class Protocol:
 
     def start(self):
         print "starting protocol"
-        self.current_widget = self.current_step.startStep(self.end_step)
+        self.current_step.startStep(self.end_step)
+        self.current_widget  = self.current_step.widget
         self.layout.addWidget(self.current_widget)
         self.session['start'] = datetime.datetime.now()
 
@@ -76,7 +77,8 @@ class Protocol:
             self.current_step = self.steps[self.current_step_idx]
             self.current_widget.close()
             self.layout.removeWidget(self.current_widget)
-            self.current_widget = self.current_step.startStep(self.end_step)
+            self.current_step.startStep(self.end_step)
+            self.current_widget = self.current_step.widget
             self.layout.addWidget(self.current_widget)
         else:
             self.end()
