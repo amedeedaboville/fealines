@@ -19,10 +19,13 @@ class Protocol:
 
             self.steps = []
             for step in json_protocol:
-                if step['type'] == 'calibration':
-                    self.steps.append(CalibrationStep(step))
-                elif step['type'] == 'connection':
-                    self.steps.append(ConnectionStep(step))
+                if 'type' in step:
+                    if step['type'] == 'calibration':
+                        self.steps.append(CalibrationStep(step))
+                    elif step['type'] == 'connection':
+                        self.steps.append(ConnectionStep(step))
+                    else:
+                        print u"Unknown step type '{0:s}'".format(step['type'])
                 else:
                     self.steps.append(Step(step))
 
