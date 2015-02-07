@@ -8,6 +8,9 @@ class ConnectionStep(Step):
     """
     A connection step which waits for all sensors to have good signal for 10 seconds.
     """
+    update_bars_signal = pyqtSignal()
+    end_connection_signal = pyqtSignal()
+
     def __init__(self, props):
         super(ConnectionStep, self).__init__(props)
 
@@ -33,9 +36,8 @@ class ConnectionStep(Step):
 
             self.f_layout.addWidget(bar)
 
-        self.trigger = SenderObject()
-        self.trigger.update_bars.connect(self.update_bars)
-        self.trigger.end_connection.connect(self.end_connection)
+        self.update_bars_signal.connect(self.update_bars)
+        self.end_connection_signal.connect(self.end_connection)
 
         self.f_widget.setLayout(self.f_layout)
         self.grid.addWidget(self.f_widget)
@@ -55,9 +57,9 @@ class ConnectionStep(Step):
                         good += 1
             else:
                 timer.invalidate()
-        self.trigger.update_bars.emit()
+        self.update_bars.emit()
         if good == 4:
-            self.trigger.end_connection.emit()
+            self.end_connection.emit()
 
     def update_bars(self):
         for bar, timer in zip(self.progress_bars, self.timers):
@@ -75,7 +77,3 @@ class ConnectionStep(Step):
         self.next_button.clicked.connect(self.endStep)
         self.grid.addWidget(self.next_button)
 
-
-class SenderObject(QtGui.QWidget): #Hack to send signal from non-QObject class
-    update_bars = pyqtSignal()
-    end_connection = pyqtSignal()

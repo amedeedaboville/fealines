@@ -1,12 +1,12 @@
 from elements.EEGPlot import EEGPlot
 from elements.TimerWidget import TimerWidget
 from elements.Horseshoe import HorseshoeWidget
-from pyqtgraph import QtGui
+from pyqtgraph import QtGui, QtCore
 
 
-class Step(object):
+class Step(QtCore.QObject):
     def __init__(self, props):
-
+        super(Step, self).__init__()
         self.parse_properties(props)
         self.initUI()
 
