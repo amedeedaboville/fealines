@@ -25,13 +25,25 @@ class Step(object):
         if 'duration' in props:
             times = [int(x) for x in props['duration'].split(":")]
             self.duration = times[0]*3600 + times[1]*60 + times[2] #TODO: breaks on less than 2 ':'s
-        else: self.duration = 600
+        else: self.duration = None
+
+        if 'show_timer' in props:
+            self.show_timer = (props['show_timer'] == 'true')
+        else:
+            self.show_timer = True
+
+        if 'next_button' in props:
+            self.has_next_button = (props['next_button'] == 'true')
+        else:
+            self.show_timer = True
 
     def initUI(self):
         self.widget = QtGui.QWidget()
-        self.timer_widget = TimerWidget(self.duration, self.endStep)
         self.grid = QtGui.QHBoxLayout()
-        self.grid.addWidget(self.timer_widget)
+
+        if self.duration and self.show_timer:
+            self.timer_widget = TimerWidget(self.duration, self.endStep)
+            self.grid.addWidget(self.timer_widget)
 
         if self.graph:
             self.grid.addWidget(self.plot.pw)
@@ -42,7 +54,8 @@ class Step(object):
 
 
     def startStep(self, callback):
-        self.timer_widget.start()
+        if self.duration:
+            self.timer_widget.start()
         self.horseshoe.start()
         if self.graph:
             self.plot.start()
