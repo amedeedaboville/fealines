@@ -24,14 +24,16 @@ class MainWindow(QtGui.QMainWindow):
 
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
+        fileMenu = menubar.addMenu('&Load')
         fileMenu.addAction(closeAction)
 
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(closeAction)
+        self.toolbar.addAction(loadAction)
 
         self.setGeometry(1000,1000,1000,1000)
         self.setWindowTitle('fealines')
-        self.setCentralWidget(QtGui.QLabel("No protocol loaded"))
+        self.setCentralWidget(QtGui.QLabel("No protocol running"))
         self.show()
 
 
@@ -51,7 +53,7 @@ class MainWindow(QtGui.QMainWindow):
 def main():
     app = QtGui.QApplication(sys.argv)
     main = MainWindow()
-    main.executeProtocol()
+    # main.executeProtocol()
     app.exec_()
     sys.exit(0)
 
