@@ -18,6 +18,10 @@ class MainWindow(QtGui.QMainWindow):
         closeAction.setStatusTip('Close Application')
         closeAction.triggered.connect(quit)
 
+        loadAction = QtGui.QAction('Load Protocol', self)
+        loadAction.setStatusTip('Load the Default Protocol')
+        loadAction.triggered.connect(self.executeProtocol)
+
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(closeAction)
@@ -27,15 +31,21 @@ class MainWindow(QtGui.QMainWindow):
 
         self.setGeometry(1000,1000,1000,1000)
         self.setWindowTitle('fealines')
+        self.setCentralWidget(QtGui.QLabel("No protocol loaded"))
         self.show()
+
 
     def executeProtocol(self):
         try:
-            self.pcl = Protocol('./protocols/default.json')
-            self.central_widget = self.pcl.start()
+            self.pcl = Protocol('./protocols/default.json', self.protocolEnded)
+            self.central_widget = self.pcl.main_widget
+            self.pcl.start()
             self.setCentralWidget(self.central_widget)
         except ProtocolNotLoaded:
             pass
+
+    def protocolEnded(self):
+        self.setCentralWidget(QtGui.QLabel("No protocol loaded"))
 
 
 def main():

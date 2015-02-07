@@ -7,7 +7,7 @@ from ConnectionStep import ConnectionStep
 
 
 class Protocol:
-    def __init__(self, fileName):
+    def __init__(self, fileName, callback):
         with open(fileName) as contents:
             try:
                 json_protocol = json.load(contents)
@@ -34,6 +34,7 @@ class Protocol:
             'steps': []
         }
 
+        self.callback = callback
         self.current_step_idx = 0
         self.current_step = self.steps[self.current_step_idx]
         self.main_widget = QtGui.QWidget()
@@ -44,13 +45,16 @@ class Protocol:
         self.current_widget = self.current_step.startStep(self.end_step)
         self.layout.addWidget(self.current_widget)
         self.session['start'] = datetime.datetime.now()
-        return self.main_widget
 
     def end(self):
+        self.session['end'] = datetime.datetime.now()
         with open("./recordings/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S"), "w+") as file:
             json.dump(self.session, file, default=self.default_serializer)
         print "protocol ended. Data:"
         print self.session
+        self.current_widget.close()
+        self.main_widget.close()
+        self.callback()
 
     def default_serializer(self, obj):
       if isinstance(obj, datetime.datetime):
