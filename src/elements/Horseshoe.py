@@ -66,7 +66,7 @@ class HorseshoeWidget(QtGui.QLabel):
     def update_labels(self):
         for idx, number in enumerate(self.horseshoe + [self.forehead]):
             desc = self.read_description(number)
-            desc = random.choice(['bad', 'ok', 'good']) #for debugging
+            # desc = random.choice(['bad', 'ok', 'good']) #for debugging
             self.labels[idx] = self.pixmaps[desc][idx]
         self.repaint()
 
