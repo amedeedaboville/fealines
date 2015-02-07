@@ -1,6 +1,6 @@
 import json
 import datetime
-from pyqtgraph import QtGui
+from PyQt4.QtGui import QWidget, QGridLayout
 from Step import Step
 from CalibrationStep import CalibrationStep
 from ConnectionStep import ConnectionStep
@@ -37,11 +37,12 @@ class Protocol:
         self.callback = callback
         self.current_step_idx = 0
         self.current_step = self.steps[self.current_step_idx]
-        self.main_widget = QtGui.QWidget()
-        self.layout = QtGui.QGridLayout()
+        self.main_widget = QWidget()
+        self.layout = QGridLayout()
         self.main_widget.setLayout(self.layout)
 
     def start(self):
+        print "starting protocol"
         self.current_widget = self.current_step.startStep(self.end_step)
         self.layout.addWidget(self.current_widget)
         self.session['start'] = datetime.datetime.now()

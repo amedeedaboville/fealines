@@ -1,24 +1,23 @@
 import signal
 
-from pyqtgraph.Qt import QtGui
-
+from PyQt4.QtGui import QMainWindow, QAction, QLabel, QApplication
 from muselo import *
 from Protocol.feaProtocol import Protocol, ProtocolNotLoaded
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.initUI()
 
     def initUI(self):
-        closeAction = QtGui.QAction('Close', self)
+        closeAction = QAction('Close', self)
         closeAction.setShortcut('Ctrl+Q')
         closeAction.setStatusTip('Close Application')
         closeAction.triggered.connect(quit)
 
-        loadAction = QtGui.QAction('Load Protocol', self)
+        loadAction = QAction('Load Protocol', self)
         loadAction.setStatusTip('Load the Default Protocol')
         loadAction.triggered.connect(self.executeProtocol)
 
@@ -33,27 +32,28 @@ class MainWindow(QtGui.QMainWindow):
 
         self.setGeometry(1000,1000,1000,1000)
         self.setWindowTitle('fealines')
-        self.setCentralWidget(QtGui.QLabel("No protocol running"))
+        self.setCentralWidget(QLabel("No protocol running"))
         self.show()
 
 
     def executeProtocol(self):
+        print "Executing protocol"
         try:
             self.pcl = Protocol('./protocols/default.json', self.protocolEnded)
-            self.central_widget = self.pcl.main_widget
-            self.pcl.start()
-            self.setCentralWidget(self.central_widget)
         except ProtocolNotLoaded:
-            pass
+            print "protocol not loaded..."
+        self.central_widget = self.pcl.main_widget
+        self.setCentralWidget(self.central_widget)
+        self.pcl.start()
 
     def protocolEnded(self):
-        self.setCentralWidget(QtGui.QLabel("No protocol loaded"))
+        self.setCentralWidget(QLabel("No protocol loaded"))
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     main = MainWindow()
-    # main.executeProtocol()
+    main.executeProtocol()
     app.exec_()
     sys.exit(0)
 

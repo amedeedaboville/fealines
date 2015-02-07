@@ -1,8 +1,7 @@
 from Step import Step
 import random
-from os import system
 import subprocess
-from pyqtgraph.Qt import QtCore, QtGui
+from PyQt4.QtCore import QTimer
 
 
 class CalibrationStep(Step):
@@ -21,7 +20,7 @@ class CalibrationStep(Step):
             words = f.read().splitlines()
         self.words_to_say = random.sample(words, self.num_words)
 
-        self.say_timer = QtCore.QTimer()
+        self.say_timer = QTimer()
 
     def startStep(self, callback):
         self.callback = callback

@@ -1,6 +1,6 @@
 from Step import Step
-from pyqtgraph.Qt import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignal
+from PyQt4.QtCore import pyqtSignal, QElapsedTimer
+from PyQt4.QtGui import QLabel, QWidget, QVBoxLayout, QProgressBar
 import muselo
 
 
@@ -15,15 +15,15 @@ class ConnectionStep(Step):
         super(ConnectionStep, self).__init__(props)
 
         self.time_to_finish = 10
-        self.f_widget = QtGui.QWidget()
-        self.f_layout = QtGui.QVBoxLayout()
-        self.progress_bars = [QtGui.QProgressBar() for _ in range(4)]
-        self.timers = [QtCore.QElapsedTimer() for _ in range(4)]
+        self.f_widget = QWidget()
+        self.f_layout = QVBoxLayout()
+        self.progress_bars = [QProgressBar() for _ in range(4)]
+        self.timers = [QElapsedTimer() for _ in range(4)]
 
         for timer in self.timers:
             timer.invalidate()
 
-        self.title_label = QtGui.QLabel("Adjust the Headband until all of the bars are full")
+        self.title_label = QLabel("Adjust the Headband until all of the bars are full")
         self.title_label.setMaximumHeight(100)
         self.f_layout.addWidget(self.title_label)
         self.colors = ["#ea6a1f", "#009986", "#555c99", "#d20e8a"]
@@ -42,7 +42,10 @@ class ConnectionStep(Step):
         self.f_widget.setLayout(self.f_layout)
         self.grid.addWidget(self.f_widget)
 
+    def startStep(self, callback):
+        print "starting connection step"
         muselo.server.register_listener('/muse/elements/horseshoe', self.receive_horseshoe)
+        super(ConnectionStep, self).startStep(callback)
 
     def receive_horseshoe(self, path, args):
         good = 0

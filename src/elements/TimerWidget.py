@@ -1,5 +1,6 @@
-from pyqtgraph.Qt import QtCore, QtGui
-class TimerWidget(QtGui.QLabel):
+from PyQt4.QtGui import QLabel
+from PyQt4.QtCore import QTimer
+class TimerWidget(QLabel):
     def __init__(self, time, callback):
         """
         :param time:
@@ -14,11 +15,11 @@ class TimerWidget(QtGui.QLabel):
         self.callback = callback
         self.time_left = time
 
-        self.total_timer = QtCore.QTimer(self)
+        self.total_timer = QTimer(self)
         self.total_timer.setSingleShot(True)
         self.total_timer.timeout.connect(self.stop)
 
-        self.seconds_timer = QtCore.QTimer(self)
+        self.seconds_timer = QTimer(self)
         self.seconds_timer.timeout.connect(self.updateDisplay)
 
     def start(self):

@@ -1,14 +1,16 @@
 from elements.EEGPlot import EEGPlot
 from elements.TimerWidget import TimerWidget
 from elements.Horseshoe import HorseshoeWidget
-from pyqtgraph import QtGui, QtCore
 
+from PyQt4.QtCore import QObject
+from PyQt4.QtGui import QWidget, QHBoxLayout, QPushButton
 
-class Step(QtCore.QObject):
+class Step(QObject):
     def __init__(self, props):
         super(Step, self).__init__()
         self.parse_properties(props)
         self.initUI()
+        print "Step {0} initialized".format(self.name)
 
         self.data_dict = {"name": self.name}
 
@@ -38,8 +40,8 @@ class Step(QtCore.QObject):
             self.has_next_button = True
 
     def initUI(self):
-        self.widget = QtGui.QWidget()
-        self.grid = QtGui.QHBoxLayout()
+        self.widget = QWidget()
+        self.grid = QHBoxLayout()
 
         if self.duration and self.show_timer:
             self.timer_widget = TimerWidget(self.duration, self.endStep)
@@ -54,6 +56,7 @@ class Step(QtCore.QObject):
 
 
     def startStep(self, callback):
+        print "starting a step"
         if self.duration:
             self.timer_widget.start()
         self.horseshoe.start()
@@ -70,7 +73,7 @@ class Step(QtCore.QObject):
                 self.data_dict[name] = widget.serialize()
         if self.has_next_button:
             for i in range(self.grid.count()): self.grid.itemAt(i).widget().close() # clear the layout
-            self.next_button = QtGui.QPushButton()
+            self.next_button = QPushButton()
             self.next_button.setText("Press to Continue")
             self.next_button.clicked.connect(lambda: self.callback(self.data_dict))
             self.grid.addWidget(self.next_button)

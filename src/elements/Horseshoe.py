@@ -1,10 +1,9 @@
-import random
 from PyQt4.QtCore import pyqtSignal
-from pyqtgraph.Qt import QtCore, QtGui
+from PyQt4.QtGui import QGridLayout, QLabel, QImage, QPixmap, QPainter
 import muselo
 
 
-class HorseshoeWidget(QtGui.QLabel):
+class HorseshoeWidget(QLabel):
 
     trigger = pyqtSignal()
 
@@ -12,7 +11,7 @@ class HorseshoeWidget(QtGui.QLabel):
         super(HorseshoeWidget, self).__init__(parent)
         self.horseshoe = [0, 0, 0, 0]
         self.forehead = 0
-        self.layout = QtGui.QGridLayout()
+        self.layout = QGridLayout()
         self.labels = [0] * 5
         self.colors = []
 
@@ -25,9 +24,11 @@ class HorseshoeWidget(QtGui.QLabel):
         background-repeat: no-repeat; }""")
 
         self.setFixedSize(84, 84)
+        print "about to show"
         self.show()
 
     def start(self):
+        print "starting horseshoe"
         muselo.server.register_listener('/muse/elements/horseshoe', self.receive_horseshoe)
         muselo.server.register_listener('/muse/elements/touching_forehead', self.receive_forehead)
 
@@ -42,9 +43,9 @@ class HorseshoeWidget(QtGui.QLabel):
         for idx in range(5):
             for desc in descs:
                 filename = "./img/horseshoe/%d-%s.png" % (idx, desc)
-                self.qimages[desc].append(QtGui.QImage())
+                self.qimages[desc].append(QImage())
                 self.qimages[desc][idx].load(filename)
-                self.pixmaps[desc].append(QtGui.QPixmap.fromImage(self.qimages[desc][idx]))
+                self.pixmaps[desc].append(QPixmap.fromImage(self.qimages[desc][idx]))
 
     def receive_horseshoe(self, path, args):
         self.horseshoe = [int(arg) for arg in args]
@@ -71,7 +72,7 @@ class HorseshoeWidget(QtGui.QLabel):
         self.repaint()
 
     def paintEvent(self, event):
-        qp = QtGui.QPainter()
+        qp = QPainter()
         qp.begin(self)
         for img in self.labels:
             qp.drawPixmap(0, 0, 84, 84, img)
