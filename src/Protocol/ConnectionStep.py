@@ -57,9 +57,9 @@ class ConnectionStep(Step):
                         good += 1
             else:
                 timer.invalidate()
-        self.update_bars.emit()
+        self.update_bars_signal.emit()
         if good == 4:
-            self.end_connection.emit()
+            self.end_connection_signal.emit()
 
     def update_bars(self):
         for bar, timer in zip(self.progress_bars, self.timers):
