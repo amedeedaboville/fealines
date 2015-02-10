@@ -25,9 +25,9 @@ class Step(QObject):
             self.data_widgets['plot'] = self.plot
 
         if 'duration' in props:
-            times = [int(x) for x in props['duration'].split(":")]
-            self.duration = times[0]*3600 + times[1]*60 + times[2] #TODO: breaks on less than 2 ':'s
-        else: self.duration = None
+            self.duration = self.parse_duration(props['duration'])
+        else:
+            self.duration = None
 
         if 'show_timer' in props:
             self.show_timer = (props['show_timer'] == 'true')
@@ -71,7 +71,7 @@ class Step(QObject):
             for name, widget in self.data_widgets.iteritems():
                 self.data_dict[name] = widget.serialize()
         if self.has_next_button:
-            for i in range(self.grid.count()): self.grid.itemAt(i).widget().close() # clear the layout
+            for i in range(self.grid.count()): self.grid.itemAt(i).widget().close()  # clear the layout
             self.next_button = QPushButton()
             self.next_button.setText("Press to Continue")
             self.next_button.clicked.connect(lambda: self.callback(self.data_dict))
@@ -79,3 +79,12 @@ class Step(QObject):
         else:
             self.callback(self.data_dict)
 
+    def parse_duration(self, time_string):
+        times = [int(x) for x in time_string.split(":")]
+        if len(times) > 0:
+            times.reverse()  # Now we have ss:mm:hh:dd
+            multipliers = [1, 60, 3600, 3600*24]
+            time_in_secs = sum([unit* multiplier for unit, multiplier in zip(times, multipliers)])
+            return time_in_secs
+        else:
+            raise ValueError("Couldn't parse step duration")
