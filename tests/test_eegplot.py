@@ -13,7 +13,7 @@ def test_eegplot_update():
     print "testing update"
     plot = EEGPlot('all')
     plot.start()
-    plot.receive_band('theta1', ('/muse/dsp/elements/theta', [0.1, 0.2, 0.3, 0.4]))
+    plot.receive_band('theta1', '/muse/dsp/elements/theta', [0.1, 0.2, 0.3, 0.4])
     print plot.data['theta1'][-1]
     assert plot.data['theta1'][-1] == 0.2
     # TODO: test long term storage of the plot's data
