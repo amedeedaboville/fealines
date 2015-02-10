@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
     def executeProtocol(self):
         print "Executing protocol"
         try:
-            self.pcl = Protocol('./protocols/default.json', self.protocolEnded)
+            self.pcl = Protocol('./protocols/graph_only.json', self.protocolEnded)
         except ProtocolNotLoaded:
             print "protocol not loaded..."
         self.central_widget = self.pcl.main_widget

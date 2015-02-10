@@ -5,13 +5,23 @@ import muselo
 
 
 class EEGPlot:
-    def __init__(self, signals):
+    def __init__(self, plot_params, signals):
         self.pw = pg.PlotWidget()
         self.data = {}# All of the data points ever received
         self.plot_data = {}# The datapoints that are shown on the screen
         self.plots = {}
         self.lines = set()
         self.listeners = []
+        if 'bar' in plot_params and plot_params['bar']:
+            self.bar = True
+            self.bar_buffer = {} # A buffer that holds datapoints until they are averaged into bars
+            self.dp_counter = {} # The number of datapoints in the buffer so far
+            if 'bar_width' in plot_params:
+                self.bar_width = int(plot_params['bar_width'])
+            else:
+                self.bar_width = 15
+        else:
+            self.bar = False
 
         for sig in signals.split(","):
             signal_name = self.read_signal(sig)
@@ -22,24 +32,28 @@ class EEGPlot:
         for line in self.lines:
             self.data[line] = []
             self.plot_data[line] = np.zeros(100)
-            self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line], pen=(0, 255, 0, 100))
+            if self.bar:
+                self.bar_buffer[line] = np.zeros(self.bar_width)
+                self.dp_counter[line] = 0
+                self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line], pen=(0, 255, 0, 100),
+                                                fillLevel = 0, fillBrush = (255, 0, 0))
+            else:
+                self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line], pen=(0, 255, 0, 100))
+
 
             #For now we register listeners on the paths of both muse-player versions: 3.4 and 3.6
             if line == 'fea':
                 self.register_muse_listener('/muse/elements/alpha_relative', self.receive_fea)
-
                 self.register_muse_listener('/muse/dsp/elements/alpha', self.receive_fea)
             else:
                 band_name = line[:-1]
                 if band_name in bands:
-                    self.register_muse_listener('/muse/elements/%s_relative' % band_name,
-                                                    partial(self.receive_band, line))
-                    self.register_muse_listener('/muse/dsp/elements/%s' % band_name,
-                                                    partial(self.receive_band, line))
+                    self.register_muse_listener('/muse/elements/%s_relative'%band_name, partial(self.receive_band,line))
+                    self.register_muse_listener('/muse/dsp/elements/%s' % band_name, partial(self.receive_band, line))
                 else:
                     raise KeyError("Couldn't understand signal name %s and didn't register with server" % line)
 
-    def register_muse_listener(self, path, callback): #We use this function to record all of our listeners
+    def register_muse_listener(self, path, callback):  # Record listeners here so we can remove them later
         self.listeners.append((path, callback))
         muselo.server.register_listener(path, callback)
 
@@ -65,9 +79,31 @@ class EEGPlot:
     def update_dp(self, line, new_dp):
         self.data[line].append(new_dp)
 
-        self.plot_data[line] = np.roll(self.plot_data[line], -1)
-        self.plot_data[line][-1] = new_dp
-        self.plots[line].setData(self.plot_data[line])
+        if self.bar:
+            idx = self.dp_counter[line]
+            print idx
+            if idx < self.bar_width:
+                self.bar_buffer[line][idx] = new_dp
+                self.dp_counter[line] += 1
+            else:
+                print "ignoring dp"
+
+            if idx >= self.bar_width:
+                avg = self.bar_buffer[line].mean()
+                self.dp_counter[line] = 0
+                self.bar_buffer[line][:] = 0
+
+                roll_amount = -1 * (self.bar_width + 1)
+                self.plot_data[line] = np.roll(self.plot_data[line], roll_amount) # remove points off the left
+                self.plot_data[line][roll_amount:-1] = avg #add x points (our bar) on the right
+                self.plot_data[line][-1] = 0  # We need this for the bar to look straight
+
+                self.plots[line].setData(self.plot_data[line])
+        else:
+            self.plot_data[line] = np.roll(self.plot_data[line], -1) # remove points off the left
+            self.plot_data[line][-1] = new_dp
+            self.plots[line].setData(self.plot_data[line])
+
 
     def serialize(self):
         plot_dict = {

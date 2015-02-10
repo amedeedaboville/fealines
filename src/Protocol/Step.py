@@ -19,9 +19,22 @@ class Step(QObject):
         self.record = ('record' in props and props['record'] == 'true')
         self.name = props['name'] if 'name' in props else ''
 
-        self.graph = ('graph' in props and props['graph'] != 'false')
+        graph = ('graph' in props and props['graph'] != 'false')
+        bar = ('bar' in props and props['bar'] != 'false')
+        if graph:
+            self.graph = True
+            plot_params = {'bar': bar}
+            self.plot = EEGPlot(plot_params, props['graph'])
+        if not (graph or bar):
+            self.graph = False
+        elif graph and bar:
+            raise Exception("Cannot have both a Bar graph and a line plot on one screen")
+
+
         if self.graph:
-            self.plot = EEGPlot(props['graph'])
+            plot_params = {'bar': bar}
+            self.plot = EEGPlot(plot_params, props['graph'])
+
             self.data_widgets['plot'] = self.plot
 
         if 'duration' in props:
