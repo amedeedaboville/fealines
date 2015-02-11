@@ -5,9 +5,11 @@ The name comes from Frontal EEG Asymmetry (fea). One of the uses of this app is 
 
 #Install
 ---------
+Download dist/main.zip, unarchive it and you should have an App you can run on OSX.
+
+#Developing
 Only tested on OSX so far. Should work fine on linux with minimal changes. Possible to use on windows.
 ## Dependencies
-Sadly there is no one-click install. You will have to install pyqt:
 ```
 brew install sip
 brew install pyqt
@@ -52,33 +54,3 @@ to investigate phenomena in the raw data later.
 fealines only listens to a small fraction of osc messages. Most likely the alpha1 and alpha2, and maybe
 some device info...
 So far I am going to have each Step Element (graphs, inputs like checkboxes, text) save their own data.
-
-###TODO
-* make a calibration step
-Ability to play sound during a step
-draw connection horeshoe
-save connection
-make an "adjust the headband until connection is good step?"
-
-Brainstorming section
---------------------
-Nothing official here, just my brainstorming.
-
-Use Cases
-------
-Short brain activity recordings
-    Short samples. Record a lot of these. For example, plot fea over a year.
-    over a couple months after starting meditation/exercise/coffee
-    accumulated over a day after coffee
-Biofeedback
-
-Features needed
----------------
-play sounds in a step
-* not sure if I'll implement this
-connection step
-* working on this
-calibration step
-* passable
-full recording format
-different biofeedback options
