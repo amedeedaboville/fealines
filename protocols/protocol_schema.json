@@ -1,0 +1,47 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "version": "1",
+    "title": "Protocol",
+    "description": "A biofeedback protocol for fealines",
+    "type": "array",
+    "items": {
+        "title": "Step",
+        "description": "A description of what's on the screen for part of the session",
+        "type":"object",
+        "properties": {
+            "type": {
+                "description": "The kind of step",
+                "type": "string",
+                "default": "defaultStep"
+
+            },
+            "record": {
+                "type": "boolean",
+                "default" :"true"
+            },
+            "name": {
+                "description": "The step's name for readability",
+                "type": "string",
+                "default": ""
+            },
+            "graph": {
+                "description": "An object that defines the signal visualization",
+                "type": "object",
+                "properties": {
+                    "visual": {
+                        "type":"string",
+                        "default":"line"
+                    },
+                    "timespan": {
+                        "type":"string",
+                        "default":"line"
+                    }
+                }
+            },
+            "next_button": {
+                "type": "boolean",
+                "default": "true"
+            },
+        }
+    }
+}
