@@ -11,8 +11,8 @@ class ConnectionStep(Step):
     update_bars_signal = pyqtSignal()
     end_connection_signal = pyqtSignal()
 
-    def __init__(self, props):
-        super(ConnectionStep, self).__init__(props)
+    def __init__(self, params):
+        super(ConnectionStep, self).__init__(params)
 
         self.time_to_finish = 10
         self.f_widget = QWidget()

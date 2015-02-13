@@ -9,10 +9,10 @@ class CalibrationStep(Step):
     A calibration step which asks users to list members of categories.
     This is similar to the one in the Calm app.
     """
-    def __init__(self, props):
-        if 'duration' not in props:
-            props['duration'] = '00:00:30'
-        super(CalibrationStep, self).__init__(props)
+    def __init__(self, params):
+        if 'duration' not in params:
+            params['duration'] = '00:00:30'
+        super(CalibrationStep, self).__init__(params)
         self.num_words = 4
         self.words_said = 0
 

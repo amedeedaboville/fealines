@@ -6,9 +6,9 @@ from PyQt4.QtCore import QObject
 from PyQt4.QtGui import QWidget, QHBoxLayout, QPushButton
 
 class Step(QObject):
-    def __init__(self, props):
+    def __init__(self, params):
         super(Step, self).__init__()
-        self.parse_properties(props)
+        self.parse_properties(params)
         self.initUI()
         print "Step {0} initialized".format(self.name)
 
