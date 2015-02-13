@@ -1,47 +1,70 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "version": "1",
+    "version": "2",
     "title": "Protocol",
     "description": "A biofeedback protocol for fealines",
-    "type": "array",
-    "items": {
-        "title": "Step",
-        "description": "A description of what's on the screen for part of the session",
-        "type":"object",
-        "properties": {
-            "type": {
-                "description": "The kind of step",
-                "type": "string",
-                "default": "defaultStep"
+    "type": "object",
+    "properties":{
+        "name":{
+            "description": "The name that is shown of the protocl",
+            "type": "string"
+        },
+        "description":{
+            "description": "A description of what the protocol does",
+            "type": "string"
+        },
 
-            },
-            "record": {
-                "type": "boolean",
-                "default" :"true"
-            },
-            "name": {
-                "description": "The step's name for readability",
-                "type": "string",
-                "default": ""
-            },
-            "graph": {
-                "description": "An object that defines the signal visualization",
-                "type": "object",
+        "schema-version":{
+            "description": "The version of the schema this protocol uses",
+            "type": "number"
+        },
+
+        "steps":{
+            "type":"array",
+            "description": "The main part: the list of steps and what they do",
+            "items": {
+                "title": "Step",
+                "description": "A description of what's on the screen for part of the session",
+                "type":"object",
                 "properties": {
-                    "visual": {
-                        "type":"string",
-                        "default":"line"
+                    "type": {
+                        "description": "The kind of step",
+                        "type": "string",
+                        "default": "defaultStep"
                     },
-                    "timespan": {
-                        "type":"string",
-                        "default":"line"
+                    "record": {
+                        "type": "boolean",
+                        "default" :"true"
+                    },
+                    "name": {
+                        "description": "The step's name for readability",
+                        "type": "string",
+                        "default": ""
+                    },
+                    "graph": {
+                        "description": "An object that defines the signal visualization",
+                        "type": "object",
+                        "properties": {
+                            "signals": {
+                                "type":"string",
+                                "default":"line"
+                            },
+                            "type": {
+                                "type":"string",
+                                "default":"line"
+                            },
+                            "timespan": {
+                                "type":"string",
+                                "default":"line"
+                            }
+                        }
+                    },
+                    "next_button": {
+                        "type": "boolean",
+                        "default": "true"
                     }
                 }
-            },
-            "next_button": {
-                "type": "boolean",
-                "default": "true"
-            },
+            }
         }
     }
 }

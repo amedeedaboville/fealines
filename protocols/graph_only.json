@@ -1,8 +1,14 @@
-[
-    {
-    "name":"collect",
-    "record":"false",
-    "graph":"fea",
-    "duration":"00:10:00"
-    }
-]
+{
+    "name":"Test (FEA)",
+    "description": "Just show the fea signal on a line graph for 10 minutes",
+    "schema-version": 2,
+    "steps":
+        [
+        {
+            "name":"display-fea",
+            "record":"false",
+            "graph":"fea",
+            "duration":"00:10:00"
+        }
+    ]
+}

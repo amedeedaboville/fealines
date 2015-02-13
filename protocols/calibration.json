@@ -1,7 +1,12 @@
-[{
-    "name":"calibration",
-    "type":"calibration",
-    "record":"true",
-    "next_button":"true"
-    }
-]
+{
+    "name":"Test (Calibration)",
+    "description": "Just runs the calibration step",
+    "schema-version": 2,
+    "steps":
+        [
+        {
+            "type":"calibration",
+            "record":"false",
+        }
+    ]
+}

@@ -1,24 +1,30 @@
-[
 {
-    "name":"connect1",
-    "type":"connection",
-    "next_button":"true"
-},
-{
-    "name":"calibration",
-    "type":"calibration",
-    "record":"true",
-    "next_button":"true"
-},
-{
-    "name":"connect2",
-    "type":"connection",
-    "next_button":"true"
-},
-    {
-    "name":"collect",
-    "record":"true",
-    "graph":"fea",
-    "duration":"00:01:00"
-    }
-]
+    "name":"1 minute FEA",
+    "description": "A biofeedback session of FEA for a minute",
+    "schema-version": 2,
+    "steps":
+        [
+        {
+            "name":"connect1",
+            "type":"connection",
+            "next_button":true
+        },
+        {
+            "name":"calibration",
+            "type":"calibration",
+            "record":true,
+            "next_button":true
+        },
+        {
+            "name":"connect2",
+            "type":"connection",
+            "next_button":true
+        },
+        {
+            "name":"collect",
+            "record":true,
+            "graph": {"type":"bar", "signals":"bar"},
+            "duration":"00:01:00"
+        }
+    ]
+}

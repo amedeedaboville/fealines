@@ -1,0 +1,11 @@
+{
+    "name":"Test (Connection)",
+    "description": "Just the connection step",
+    "schema-version": 2,
+    "steps":
+        [
+        {
+            "type":"connection"
+        }
+    ]
+}
