@@ -18,7 +18,8 @@ class Protocol:
                 raise ProtocolNotLoaded
 
             self.steps = []
-            for step in json_protocol:
+
+            for step in json_protocol['steps']:
                 if 'type' in step:
                     if step['type'] == 'calibration':
                         self.steps.append(CalibrationStep(step))
