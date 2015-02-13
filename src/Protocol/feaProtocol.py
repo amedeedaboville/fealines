@@ -1,4 +1,5 @@
 import json
+import jsonschema
 import datetime
 from PyQt4.QtGui import QWidget, QGridLayout
 from Step import Step
@@ -41,6 +42,15 @@ class Protocol:
         self.main_widget = QWidget()
         self.layout = QGridLayout()
         self.main_widget.setLayout(self.layout)
+
+    @classmethod
+    def validate(cls, filename):
+        schema_location = "protocols/protocol_schema.json"
+        schema = json.load(open(schema_location))
+        pcl = json.load(open(filename))
+        jsonschema.validate(pcl, schema)
+
+
 
     def start(self):
         print "starting protocol"
