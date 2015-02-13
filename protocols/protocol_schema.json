@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "version": "2",
+    "version": "3",
     "title": "Protocol",
     "description": "A biofeedback protocol for fealines",
     "type": "object",
@@ -31,6 +31,15 @@
                         "description": "The kind of step",
                         "type": "string",
                         "default": "defaultStep"
+                    },
+                    "duration": {
+                        "type": "string",
+                        "default" :""
+                    },
+
+                    "show_timer": {
+                        "type": "string",
+                        "default" :"true"
                     },
                     "record": {
                         "type": "boolean",
