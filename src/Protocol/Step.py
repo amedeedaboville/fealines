@@ -33,6 +33,8 @@ class Step(QObject):
             plot_params = props['graph']
             self.plot = EEGPlot(plot_params)
             self.data_widgets['plot'] = self.plot
+        else:
+            self.graph = False
 
 
     def initUI(self):
@@ -76,11 +78,11 @@ class Step(QObject):
             self.callback(self.data_dict)
 
     def parse_duration(self, time_string):
-        times = [int(x) for x in time_string.split(":")]
-        if len(times) > 0:
+        if len(time_string) == 0:
+            return None
+        else:
+            times = [int(x) for x in time_string.split(":")]
             times.reverse()  # Now we have ss:mm:hh:dd
             multipliers = [1, 60, 3600, 3600*24]
             time_in_secs = sum([unit* multiplier for unit, multiplier in zip(times, multipliers)])
             return time_in_secs
-        else:
-            return None
