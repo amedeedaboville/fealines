@@ -7,7 +7,7 @@
         {
             "name":"display-fea",
             "record":"false",
-            "graph":"fea",
+            "graph": {"type":"bar", "signals":"fea"},
             "duration":"00:10:00"
         }
     ]

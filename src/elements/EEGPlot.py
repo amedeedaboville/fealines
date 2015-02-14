@@ -5,7 +5,7 @@ import muselo
 
 
 class EEGPlot:
-    def __init__(self, plot_params, signals):
+    def __init__(self, plot_params):
         self.pw = pg.PlotWidget()
         self.data = {}# All of the data points ever received
         self.plot_data = {}# The datapoints that are shown on the screen
@@ -23,7 +23,8 @@ class EEGPlot:
         else:
             self.bar = False
 
-        for sig in signals.split(","):
+        print "'", plot_params['signals'], "'"
+        for sig in plot_params['signals'].split(","):
             signal_name = self.read_signal(sig)
             self.lines = self.lines.union(signal_name)
 

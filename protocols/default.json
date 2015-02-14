@@ -23,7 +23,7 @@
         {
             "name":"collect",
             "record":true,
-            "graph": {"type":"bar", "signals":"bar"},
+            "graph": {"type":"bar", "signals":"fea"},
             "duration":"00:01:00"
         }
     ]
