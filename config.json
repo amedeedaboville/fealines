@@ -1,0 +1,6 @@
+{ "recent_protocols": [
+    "protocols/default.json",
+    "protocols/test_connection.json",
+    "protocols/calibration.json"
+    ]
+}
