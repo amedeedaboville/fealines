@@ -3,7 +3,7 @@ import json
 import os.path
 
 from PyQt4.QtGui import QMainWindow, QAction, QLabel, QApplication
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, Qt
 from muselo import *
 from Protocol.feaProtocol import Protocol, ProtocolNotLoaded
 
@@ -71,24 +71,26 @@ class MainWindow(QMainWindow):
             new_action.setData(QVariant(recent_pcl['filename']))
             load_menu.addAction(new_action)
 
-        self.setGeometry(1000,1000,1000,1000)
+        # self.setGeometry(1000,1000,1000,1000)
         self.setWindowTitle('fealines')
-        self.setCentralWidget(QLabel("No protocol running"))
+        self.show_empty_screen()
         self.show()
 
 
     def executeProtocol(self, filename="./protocols/graph_only.json"):
         print u"loading protocol {0:s}".format(filename)
         try:
-            self.pcl = Protocol(filename, self.protocolEnded)
+            self.pcl = Protocol(filename, self.show_empty_screen)
             self.central_widget = self.pcl.main_widget
             self.setCentralWidget(self.central_widget)
             self.pcl.start()
         except ProtocolNotLoaded:
             print "protocol not loaded..."
 
-    def protocolEnded(self):
-        self.setCentralWidget(QLabel("No protocol loaded"))
+    def show_empty_screen(self):
+        new_widget = QLabel("No protocol running. Select one from the Load menu to start.")
+        new_widget.setAlignment(Qt.AlignCenter)
+        self.setCentralWidget(new_widget)
 
 
 def main():
