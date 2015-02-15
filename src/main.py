@@ -63,7 +63,6 @@ class MainWindow(QMainWindow):
 
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(closeAction)
-        self.toolbar.addAction(loadAction)
 
         load_menu.addSeparator()
         for idx, recent_pcl in enumerate(self.recent_pcls):
