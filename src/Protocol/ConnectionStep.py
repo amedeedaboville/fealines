@@ -14,7 +14,7 @@ class ConnectionStep(Step):
     def __init__(self, params):
         super(ConnectionStep, self).__init__(params)
 
-        self.time_to_finish = 10
+        self.time_to_finish = 5
         self.f_widget = QWidget()
         self.f_layout = QVBoxLayout()
         self.progress_bars = [QProgressBar() for _ in range(4)]
@@ -29,7 +29,7 @@ class ConnectionStep(Step):
         self.colors = ["#ea6a1f", "#009986", "#555c99", "#d20e8a"]
         for bar, color in zip(self.progress_bars, self.colors):
             bar.setMinimum(0)
-            bar.setMaximum(self.time_to_finish)
+            bar.setMaximum(self.time_to_finish * 1000 )
             bar.setTextVisible(False)
             bar.setStyleSheet((u' QProgressBar::chunk {{ background: {0:s}; }}' +
                                u' QProgressBar {{border: 1px solid gray}}').format(color));
@@ -65,9 +65,11 @@ class ConnectionStep(Step):
     def update_bars(self):
         for bar, timer in zip(self.progress_bars, self.timers):
             if timer.isValid():
-                bar.setValue(timer.elapsed() / 1e3)
+                bar.setValue(timer.elapsed()) #/ 10)
             else:
                 bar.setValue(0)
+
+
 
     def endStep(self):
         muselo.server.remove_listener('/muse/elements/horseshoe', self.receive_horseshoe)
