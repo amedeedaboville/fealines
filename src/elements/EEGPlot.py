@@ -1,6 +1,7 @@
 import numpy as np
 import pyqtgraph as pg
 from functools import partial
+from pyqtgraph.graphicsItems import ViewBox
 import muselo
 
 
@@ -8,6 +9,9 @@ class EEGPlot:
     def __init__(self, plot_params):
         pg.setConfigOption('background', 'w')
         self.pw = pg.PlotWidget(pen=pg.mkPen('b', width=4))
+        self.pw.setYRange(-0.4,0.4)
+        self.pw.disableAutoRange(ViewBox.ViewBox.YAxis)
+        self.pw.hideButtons()
         self.bar_color = (100,100,255)
         self.data = {}# All of the data points ever received
         self.plot_data = {}# The datapoints that are shown on the screen
