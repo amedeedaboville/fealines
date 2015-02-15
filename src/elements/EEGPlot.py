@@ -6,13 +6,16 @@ import muselo
 
 class EEGPlot:
     def __init__(self, plot_params):
-        self.pw = pg.PlotWidget()
+        pg.setConfigOption('background', 'w')
+        self.pw = pg.PlotWidget(pen=pg.mkPen('b', width=4))
+        self.bar_color = (100,100,255)
         self.data = {}# All of the data points ever received
         self.plot_data = {}# The datapoints that are shown on the screen
         self.plots = {}
         self.lines = set()
         self.listeners = []
-        if 'bar' in plot_params and plot_params['bar']:
+        plot_params.setdefault("type", "bar")
+        if plot_params['type'] == "bar":
             self.bar = True
             self.bar_buffer = {} # A buffer that holds datapoints until they are averaged into bars
             self.dp_counter = {} # The number of datapoints in the buffer so far
@@ -36,10 +39,9 @@ class EEGPlot:
             if self.bar:
                 self.bar_buffer[line] = np.zeros(self.bar_width)
                 self.dp_counter[line] = 0
-                self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line], pen=(0, 255, 0, 100),
-                                                fillLevel = 0, fillBrush = (255, 0, 0))
+                self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line], fillLevel=0, fillBrush=self.bar_color)
             else:
-                self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line], pen=(0, 255, 0, 100))
+                self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line])
 
 
             #For now we register listeners on the paths of both muse-player versions: 3.4 and 3.6
