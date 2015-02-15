@@ -35,13 +35,14 @@ class EEGPlot:
         bands = ['alpha', 'beta', 'delta', 'gamma', 'theta']
         for line in self.lines:
             self.data[line] = []
-            self.plot_data[line] = np.zeros(100)
+            self.plot_data[line] = [np.arange(100), np.zeros(100)]
             if self.bar:
                 self.bar_buffer[line] = np.zeros(self.bar_width)
                 self.dp_counter[line] = 0
-                self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line], fillLevel=0, fillBrush=self.bar_color)
+                self.plots[line] = self.pw.plot(title=line, x=self.plot_data[line][0], y=self.plot_data[line][1],
+                                                fillLevel=0, fillBrush=self.bar_color)
             else:
-                self.plots[line] = self.pw.plot(title=line, y=self.plot_data[line])
+                self.plots[line] = self.pw.plot(title=line, x=self.plot_data[line][0], y=self.plot_data[line])
 
 
             #For now we register listeners on the paths of both muse-player versions: 3.4 and 3.6
@@ -97,15 +98,21 @@ class EEGPlot:
                 self.bar_buffer[line][:] = 0
 
                 roll_amount = -1 * (self.bar_width + 1)
-                self.plot_data[line] = np.roll(self.plot_data[line], roll_amount) # remove points off the left
-                self.plot_data[line][roll_amount:-1] = avg #add x points (our bar) on the right
-                self.plot_data[line][-1] = 0  # We need this for the bar to look straight
+                last_x = self.plot_data[line][0][-1]
+                self.plot_data[line][0] = np.roll(self.plot_data[line][0], roll_amount) # remove points off the left
 
-                self.plots[line].setData(self.plot_data[line])
+                self.plot_data[line][0][roll_amount:-1] = np.arange(last_x, last_x + self.bar_width)
+                self.plot_data[line][0][-1] = self.plot_data[line][0][-2] + 0.1
+
+                self.plot_data[line][1] = np.roll(self.plot_data[line][1], roll_amount) # remove points off the left
+                self.plot_data[line][1][roll_amount:-1] = avg #add x points (our bar) on the right
+                self.plot_data[line][1][-1] = 0  # We need this for the bar to look straight
+
+                self.plots[line].setData(x=self.plot_data[line][0], y=self.plot_data[line][1])
         else:
-            self.plot_data[line] = np.roll(self.plot_data[line], -1) # remove points off the left
-            self.plot_data[line][-1] = new_dp
-            self.plots[line].setData(self.plot_data[line])
+            self.plot_data[line][1] = np.roll(self.plot_data[line][1], -1) # remove points off the left
+            self.plot_data[line][1] = np.roll(self.plot_data[line][1], -1) # remove points off the left
+            self.plots[line].setData(x=self.plot_data[line][0], y=self.plot_data[line][1])
 
 
     def serialize(self):
