@@ -10,8 +10,8 @@ class CalibrationStep(Step):
     This is similar to the one in the Calm app.
     """
     def __init__(self, params):
-        if 'duration' not in params:
-            params['duration'] = '00:00:30'
+        params['duration'] = '00:01:00'
+        params['next_button'] = 'true'
         super(CalibrationStep, self).__init__(params)
         self.num_words = 4
         self.words_said = 0
@@ -24,11 +24,11 @@ class CalibrationStep(Step):
 
     def startStep(self, callback):
         self.callback = callback
-        self.timer_widget.start()
         self.horseshoe.start()
 
         self.say_instructions()
         self.say_timer.singleShot(1 * 7000, self.next_word)
+        QTimer().singleShot(1 * 7000, self.timer_widget.start)
         return self.widget
 
     def say_instructions(self):
@@ -43,7 +43,7 @@ class CalibrationStep(Step):
         if self.words_said < self.num_words:
             self.say_word()
             self.words_said += 1
-            self.say_timer.singleShot(2 * 1000, self.next_word)
+            self.say_timer.singleShot(15 * 1000, self.next_word)
 
     def say_string(self, string):
         subprocess.Popen(["say", string])
