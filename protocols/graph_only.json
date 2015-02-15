@@ -1,5 +1,5 @@
 {
-    "name":"Test (FEA)",
+    "name":"Test (FEA Graph)",
     "description": "Just show the fea signal on a line graph for 10 minutes",
     "schema-version": 2,
     "steps":
