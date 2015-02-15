@@ -1,5 +1,5 @@
 from Step import Step
-from PyQt4.QtCore import pyqtSignal, QElapsedTimer
+from PyQt4.QtCore import pyqtSignal, QElapsedTimer, Qt
 from PyQt4.QtGui import QLabel, QWidget, QVBoxLayout, QProgressBar
 import muselo
 
@@ -12,6 +12,7 @@ class ConnectionStep(Step):
     end_connection_signal = pyqtSignal()
 
     def __init__(self, params):
+        params['next_button'] = True
         super(ConnectionStep, self).__init__(params)
 
         self.time_to_finish = 5
@@ -23,7 +24,12 @@ class ConnectionStep(Step):
         for timer in self.timers:
             timer.invalidate()
 
-        self.title_label = QLabel("Adjust the Headband until all of the bars are full")
+        self.title_label = QLabel("Adjust the headband until all of the bars are full.")
+        font = self.title_label.font()
+        font.setPointSize(28)
+        font.setBold(False)
+        self.title_label.setFont(font)
+        self.title_label.setAlignment(Qt.AlignCenter)
         self.title_label.setMaximumHeight(100)
         self.f_layout.addWidget(self.title_label)
         self.colors = ["#ea6a1f", "#009986", "#555c99", "#d20e8a"]
@@ -32,7 +38,7 @@ class ConnectionStep(Step):
             bar.setMaximum(self.time_to_finish * 1000 )
             bar.setTextVisible(False)
             bar.setStyleSheet((u' QProgressBar::chunk {{ background: {0:s}; }}' +
-                               u' QProgressBar {{border: 1px solid gray}}').format(color));
+                               u' QProgressBar {{border: 1px solid gray; height: 60px}}').format(color));
 
             self.f_layout.addWidget(bar)
 
