@@ -67,7 +67,6 @@ class MainWindow(QMainWindow):
 
         load_menu.addSeparator()
         for idx, recent_pcl in enumerate(self.recent_pcls):
-            print recent_pcl['name']
             new_action = QAction("%d %s" % (idx + 1, recent_pcl['name']), self)
             new_action.triggered.connect(self.open_recent_pcl)
             new_action.setData(QVariant(recent_pcl['filename']))
@@ -83,11 +82,11 @@ class MainWindow(QMainWindow):
         print u"loading protocol {0:s}".format(filename)
         try:
             self.pcl = Protocol(filename, self.protocolEnded)
+            self.central_widget = self.pcl.main_widget
+            self.setCentralWidget(self.central_widget)
+            self.pcl.start()
         except ProtocolNotLoaded:
             print "protocol not loaded..."
-        self.central_widget = self.pcl.main_widget
-        self.setCentralWidget(self.central_widget)
-        self.pcl.start()
 
     def protocolEnded(self):
         self.setCentralWidget(QLabel("No protocol loaded"))
