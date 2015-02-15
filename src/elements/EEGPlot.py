@@ -42,7 +42,7 @@ class EEGPlot:
                 self.plots[line] = self.pw.plot(title=line, x=self.plot_data[line][0], y=self.plot_data[line][1],
                                                 fillLevel=0, fillBrush=self.bar_color)
             else:
-                self.plots[line] = self.pw.plot(title=line, x=self.plot_data[line][0], y=self.plot_data[line])
+                self.plots[line] = self.pw.plot(title=line, x=self.plot_data[line][0], y=self.plot_data[line][1])
 
 
             #For now we register listeners on the paths of both muse-player versions: 3.4 and 3.6
@@ -111,7 +111,7 @@ class EEGPlot:
                 self.plots[line].setData(x=self.plot_data[line][0], y=self.plot_data[line][1])
         else:
             self.plot_data[line][1] = np.roll(self.plot_data[line][1], -1) # remove points off the left
-            self.plot_data[line][1] = np.roll(self.plot_data[line][1], -1) # remove points off the left
+            self.plot_data[line][1][-1] = new_dp
             self.plots[line].setData(x=self.plot_data[line][0], y=self.plot_data[line][1])
 
 
