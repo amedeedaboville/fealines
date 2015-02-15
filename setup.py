@@ -16,10 +16,17 @@ OPTIONS = {
         'includes': ['sip', 'numpy', 'PyQt4', 'jsonschema'],
         'excludes': ['PyQt4.QtDesigner', 'PyQt4.QtNetwork', 'PyQt4.QtOpenGL', 'PyQt4.QtScript', 'PyQt4.QtSql', 'PyQt4.QtTest', 'PyQt4.QtWebKit', 'PyQt4.QtXml', 'PyQt4.phonon',
             'PyQt4.uic.port_v3']
-            }
+        }
 
 
 setup(
+        name = "fealines",
+        version = "0.1.5",
+        author = "Amedee d'Aboville",
+        author_email = "amedee.daboville@gmail.com",
+        description = ("A PyQt application to visualize interaxon Muse data and perform biofeedback."),
+        keywords = "pyqt4 eeg muse",
+        license = "BSD",
         app=APP,
         data_files=DATA_FILES,
         options={'py2app': OPTIONS},
