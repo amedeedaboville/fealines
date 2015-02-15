@@ -71,10 +71,9 @@ class MainWindow(QMainWindow):
             new_action.setData(QVariant(recent_pcl['filename']))
             load_menu.addAction(new_action)
 
-        # self.setGeometry(1000,1000,1000,1000)
         self.setWindowTitle('fealines')
         self.show_empty_screen()
-        self.show()
+        self.showMaximized()
 
 
     def executeProtocol(self, filename="./protocols/graph_only.json"):
