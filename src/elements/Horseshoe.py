@@ -30,7 +30,7 @@ class HorseshoeWidget(QLabel):
     def start(self):
         print "starting horseshoe"
         muselo.server.register_listener('/muse/elements/horseshoe', self.receive_horseshoe)
-        muselo.server.register_listener('/muse/elements/touching_forehead', self.receive_forehead)
+        muselo.server.register_listener('/muse/elements/touching_forehead', self.receive_forehead, 'i')
 
     def stop(self):
         muselo.server.remove_listener('/muse/elements/horseshoe', self.receive_horseshoe)

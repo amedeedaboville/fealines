@@ -12,9 +12,9 @@ class MuseServer(ServerThread):
             for listener in self.listeners[path]:
                 listener(path, args)
 
-    def register_listener(self, signal, listener):
+    def register_listener(self, signal, listener, signal_type='ffff'):
         if signal not in self.listeners:
-            self.add_method(signal, 'ffff', self.receive_signal)
+            self.add_method(signal, signal_type, self.receive_signal)
             self.listeners[signal] = []
         if listener not in self.listeners[signal]:
             self.listeners[signal].append(listener)
