@@ -5,7 +5,9 @@ python:
   - "3.2"
   - "3.3"
   - "3.4"
-# command to install dependencies
-install: "python setup.py install"
+# The extra env vars are for pyliblo
+install:  "C_INCLUDE_PATH=/usr/local/include LIBRARY_PATH=/usr/local/lib python setup.py install"
+
+
 # command to run tests
 script: nosetests tests
