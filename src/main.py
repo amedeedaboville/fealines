@@ -2,7 +2,7 @@ import signal
 import json
 import os.path
 
-from PyQt4.QtGui import QMainWindow, QAction, QLabel, QApplication
+from PyQt4.QtGui import QMainWindow, QAction, QLabel, QApplication, QFileDialog
 from PyQt4.QtCore import QVariant, Qt
 from muselo import *
 from Protocol.feaProtocol import Protocol, ProtocolNotLoaded
@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
 
         loadAction = QAction('Load Protocol', self)
         loadAction.setStatusTip('Load the Default Protocol')
-        loadAction.triggered.connect(self.executeProtocol)
+        loadAction.triggered.connect(self.find_pcl_file)
 
         menubar = self.menuBar()
         file_menu = menubar.addMenu('&File')
@@ -74,6 +74,10 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('fealines')
         self.show_empty_screen()
         self.showMaximized()
+
+    def find_pcl_file(self):
+        filename = QFileDialog.getOpenFileName(self, 'Choose a Protocol', './protocols', "Protocols (*.json)" )
+        self.executeProtocol(filename)
 
 
     def executeProtocol(self, filename="./protocols/graph_only.json"):
