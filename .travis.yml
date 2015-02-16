@@ -6,7 +6,8 @@ python:
   - "3.3"
   - "3.4"
 # The extra env vars are for pyliblo
-install:  "C_INCLUDE_PATH=/usr/local/include LIBRARY_PATH=/usr/local/lib python setup.py install"
+    
+install:  "apt-get install liblo0 liblo0-dev; C_INCLUDE_PATH=/usr/local/include LIBRARY_PATH=/usr/local/lib python setup.py install"
 
 
 # command to run tests
