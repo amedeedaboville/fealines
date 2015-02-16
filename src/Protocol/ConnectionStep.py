@@ -79,6 +79,7 @@ class ConnectionStep(Step):
 
     def endStep(self):
         muselo.server.remove_listener('/muse/elements/horseshoe', self.receive_horseshoe)
+        self.horseshoe.stop()
         self.f_widget.close()
         super(ConnectionStep, self).endStep()
 
